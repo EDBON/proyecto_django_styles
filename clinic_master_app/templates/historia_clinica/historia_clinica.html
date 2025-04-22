@@ -1,0 +1,35 @@
+{% extends 'medico.html' %}
+
+{% block title %}Historia Clínica{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Historia Clínica de {{ persona.nombre }} {{ persona.apellido }}</h2>
+
+    {% if consultas %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Motivo</th>
+                    <th>Diagnóstico</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for consulta in consultas %}
+                    <tr>
+                        <td>{{ consulta.fecha }}</td>
+                        <td>{{ consulta.id_anamnesis.motivo }}</td>
+                        <td>{{ consulta.id_diagnostico.descripcion }}</td>
+                        <td>
+                            <a href="{% url 'detalle_consulta' consulta.id %}" class="btn btn-primary btn-sm">Mirar Consulta</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay consultas registradas para este paciente.</p>
+    {% endif %}
+</div>
+{% endblock %}

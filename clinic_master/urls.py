@@ -22,7 +22,10 @@ from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
+    # region lagin
+    path("", views.login_view, name="login"),
     
+    path('mis_citas/', views.filtrar_mis_citas, name='filtrar_mis_citas'),
     
     path('activar_cita/<int:cita_id>/', views.activar_cita, name='activar_cita'),
     path('citas-inactivas/', views.seleccionar_cita, name='seleccionar_cita'),
@@ -35,8 +38,8 @@ urlpatterns = [
     path('actualizar_usuario/<int:usuario_id>/', views.actualizar_usuario, name='actualizar_usuario'),
     path('eliminar_usuario/<int:usuario_id>/', views.eliminar_usuario, name='eliminar_usuario'),
     
-    # region lagin
-    path("login/", views.login_view, name="login"),
+    
+    
 
     path("logout/", LogoutView.as_view(next_page="login"), name="logout"),
     
@@ -96,15 +99,9 @@ urlpatterns = [
     path('actualizar_sala/<int:sala_id>/', views.actualizar_sala, name='actualizar_sala'),
     path('eliminar_sala/<int:sala_id>/', views.eliminar_sala, name='eliminar_sala'),
 
-    # region Rutas para Examen
-    path('crear_examen/', views.crear_examen, name='crear_examen'),
-    path('listar_examen/', views.listar_examenes, name='listar_examen'),
-    path('actualizar_examen/<int:examen_id>/', views.actualizar_examen, name='actualizar_examen'),
-    path('eliminar_examen/<int:examen_id>/', views.eliminar_examen, name='eliminar_examen'),
-
     # region Rutas para Diagnostico
-    path('crear_diagnostico/', views.crear_diagnostico, name='crear_diagnostico'),
-    path('listar_diagnostico/', views.listar_diagnosticos, name='listar_diagnostico'),
+    path('crear_diagnostico/<int:consulta_id>/', views.crear_diagnostico, name='crear_diagnostico'),
+    path('listar_diagnosticos/', views.listar_diagnosticos, name='listar_diagnosticos'),
     path('actualizar_diagnostico/<int:diagnostico_id>/', views.actualizar_diagnostico, name='actualizar_diagnostico'),
     path('eliminar_diagnostico/<int:diagnostico_id>/', views.eliminar_diagnostico, name='eliminar_diagnostico'),
 
@@ -121,7 +118,7 @@ urlpatterns = [
     path('eliminar_exploracion_fisica/<int:exploracion_fisica_id>/', views.eliminar_exploracion_fisica, name='eliminar_exploracion_fisica'),
 
     # region Rutas para Consulta
-    path('crear_consulta/', views.crear_consulta, name='crear_consulta'),
+    path('consulta/crear/<int:cita_id>/', views.crear_consulta, name='crear_consulta'),
     path('listar_consulta/', views.listar_consultas, name='listar_consultas'),
     path('actualizar_consulta/<int:consulta_id>/', views.actualizar_consulta, name='actualizar_consulta'),
     path('eliminar_consulta/<int:consulta_id>/', views.eliminar_consulta, name='eliminar_consulta'),
@@ -139,11 +136,18 @@ urlpatterns = [
     path('eliminar_formula/<int:formula_id>/', views.eliminar_formula, name='eliminar_formula'),
 
     # region Rutas para HistoriaClinica
+    path('historia_clinica/<int:persona_id>/', views.ver_historia_clinica, name='ver_historia_clinica'),path('historia_clinica/<int:persona_id>/', views.ver_historia_clinica, name='ver_historia_clinica'),
     path('crear_historia_clinica/', views.crear_historia_clinica, name='crear_historia_clinica'),
     path('listar_historia_clinica/', views.listar_historias_clinicas, name='listar_historia_clinica'),
     path('actualizar_historia_clinica/<int:historia_clinica_id>/', views.actualizar_historia_clinica, name='actualizar_historia_clinica'),
     path('eliminar_historia_clinica/<int:historia_clinica_id>/', views.eliminar_historia_clinica, name='eliminar_historia_clinica'),
+    path('consulta/<int:consulta_id>/', views.detalle_consulta, name='detalle_consulta'),
+    # region api_empleados por especialidad
+    path('ajax/medico-por-cita/', views.obtener_medico_por_cita, name='obtener_medico_por_cita'),
+    path('api/empleados/', views.empleados_por_especialidad, name='api_empleados_por_especialidad'),
+    
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 # ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

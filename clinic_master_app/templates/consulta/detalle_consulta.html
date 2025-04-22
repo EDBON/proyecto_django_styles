@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Detalle de Consulta{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Detalle de la Consulta</h2>
+
+    <hr>
+    <h4>Información General</h4>
+    <p><strong>Fecha:</strong> {{ consulta.fecha }}</p>
+    <p><strong>Médico:</strong> {{ consulta.medico }}</p>
+
+    {% if anamnesis %}
+    <hr>
+    <h4>Anamnesis</h4>
+    <p><strong>Cirugías:</strong> {{ anamnesis.cirugias }}</p>
+    <p><strong>Hospitalización:</strong> {{ anamnesis.hospitalizacion }}</p>
+    <p><strong>Alergias:</strong> {{ anamnesis.alergias }}</p>
+    <p><strong>Enfermedad Familiar:</strong> {{ anamnesis.enfermedad_familiar }}</p>
+    <p><strong>Trabajo:</strong> {{ anamnesis.trabajo }}</p>
+    <p><strong>Fuma:</strong> {{ anamnesis.fuma }}</p>
+    <p><strong>Ejercicio:</strong> {{ anamnesis.ejercicio }}</p>
+    <p><strong>Medicamentos:</strong> {{ anamnesis.medicamentos }}</p>
+    {% endif %}
+
+    {% if exploracion %}
+    <hr>
+    <h4>Exploración Física</h4>
+    <p><strong>Frecuencia Cardíaca:</strong> {{ exploracion.frecuencia_cardiaca }}</p>
+    <p><strong>Temperatura:</strong> {{ exploracion.temperatura }}</p>
+    <p><strong>Presión Diastólica:</strong> {{ exploracion.presion_diastolica }}</p>
+    <p><strong>Saturación de Oxígeno:</strong> {{ exploracion.saturacion_oxigeno }}</p>
+    <p><strong>Inspección General:</strong> {{ exploracion.inspeccion_general }}</p>
+    <p><strong>Cabeza y Cuello:</strong> {{ exploracion.cabeza_cuello }}</p>
+    <p><strong>Tórax y Pulmones:</strong> {{ exploracion.torax_pulmones }}</p>
+    <p><strong>Corazón:</strong> {{ exploracion.corazon }}</p>
+    <p><strong>Abdomen:</strong> {{ exploracion.abdomen }}</p>
+    <p><strong>Extremidades:</strong> {{ exploracion.extremidades }}</p>
+    <p><strong>Sistema Nervioso:</strong> {{ exploracion.sistema_nervioso }}</p>
+    {% endif %}
+
+    {% if diagnostico %}
+    <hr>
+    <h4>Diagnóstico</h4>
+    <p><strong>Diagnóstico Principal:</strong> {{ diagnostico.diagnostico_principal }}</p>
+    <p><strong>Pruebas Complementarias:</strong> {{ diagnostico.pruebas_complementarias }}</p>
+    <p><strong>Interpretación del Examen:</strong> {{ diagnostico.interpretacion_examen }}</p>
+    <p><strong>Diagnóstico Final:</strong> {{ diagnostico.diagnostico_final }}</p>
+
+    <hr>
+    <h4>Fórmulas Médicas</h4>
+    {% if formulas.exists %}
+        {% for formula in formulas %}
+        <div class="card mb-3">
+            <div class="card-header">
+                {{ formula.mid_nombre_medicamento.nombre_medicamento }}
+            </div>
+            <div class="card-body">
+                <p><strong>Dosis:</strong> {{ formula.mid_nombre_medicamento.dosis }}</p>
+                <p><strong>Frecuencia:</strong> {{ formula.mid_nombre_medicamento.frecuencia }}</p>
+                <p><strong>Duración del Tratamiento:</strong> {{ formula.mid_nombre_medicamento.duracion_tratamiento }}</p>
+                <p><strong>Cantidad Total:</strong> {{ formula.mid_nombre_medicamento.cantidad_total }}</p>
+                <p><strong>Indicaciones Especiales:</strong> {{ formula.mid_nombre_medicamento.indicaciones_especiales }}</p>
+                <p><strong>Recomendaciones Médicas:</strong> {{ formula.recomendaciones_medicas }}</p>
+                <p><strong>Fecha de Expiración:</strong> {{ formula.fecha_expiracion }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No se registraron fórmulas médicas.</p>
+    {% endif %}
+
+    {% else %}
+    <p class="text-warning">Esta consulta aún no tiene diagnóstico asignado.</p>
+    {% endif %}
+</div>
+{% endblock %}

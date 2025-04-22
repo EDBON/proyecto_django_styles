@@ -14,16 +14,16 @@
     <style>
         /* Ajuste del tamaño del carrusel */
         .carousel-container {
-            width: 80%;  /* Reduce el ancho */
-            height: 300px; /* Altura fija */
-            margin: auto; /* Centrar */
-            overflow: hidden; /* Evita desbordamientos */
+            width: 80%;  
+            height: 300px; 
+            margin: auto; 
+            overflow: hidden; 
         }
 
         .carousel-item img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Ajusta la imagen sin distorsionarla */
+            object-fit: cover;
         }
     </style>
 </head>
@@ -55,12 +55,8 @@
         </div>
         <div class="offcanvas-body">
             <ul class="nav flex-column">
-                <li class="nav-item"><a class="nav-link text-white" href="{% url 'crear_cita' %}">Empleados</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="{% url 'eliminar_cita' %}">Empleados</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="{% url 'actualizar_cita' %}">Empleados</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="{% url 'listar_citas' %}">Empleados</a></li>
-    
-    
+                <li class="nav-item"><a class="nav-link text-white" href="{% url 'crear_cita' %}">Crear Cita</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="{% url 'listar_citas' %}">Listar Citas</a></li>
             </ul>
         </div>
     </div>
@@ -68,14 +64,12 @@
     <!-- Carrusel de imágenes más pequeño -->
     <div class="carousel-container mt-4">
         <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-            <!-- Indicadores -->
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></button>
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></button>
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></button>
             </div>
 
-            <!-- Imágenes -->
             <div class="carousel-inner">
                 <div class="carousel-item active">
                     <img src="{% static 'images/pag_img1.jpg' %}" class="d-block w-100" alt="Imagen 1">
@@ -88,7 +82,6 @@
                 </div>
             </div>
 
-            <!-- Controles (Flechas) -->
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon"></span>
             </button>

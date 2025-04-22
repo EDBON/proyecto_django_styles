@@ -8,6 +8,7 @@ from django.contrib.auth import login
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now, timedelta, datetime, localtime
+from django.utils import timezone
 #region Inicio
 
 def home(request):
@@ -18,6 +19,26 @@ def auxiliar(request):
     return render(request, 'auxiliar.html') 
 def persona(request):
     return render(request, 'persona.html') 
+
+login_required
+def filtrar_mis_citas(request):
+    if request.user.persona:
+        ahora = timezone.localtime()  # fecha y hora actual, con zona horaria
+        citas = Cita.objects.filter(
+            persona=request.user.persona
+        ).filter(
+            fecha__gt=ahora.date()  # fecha mayor a hoy
+        ) | Cita.objects.filter(
+            persona=request.user.persona,
+            fecha=ahora.date(),
+            hora__gte=ahora.time()  # o bien es hoy pero con hora en el futuro
+        )
+
+        citas = citas.order_by('fecha', 'hora')  # ordenamos de la más próxima a la más lejana
+    else:
+        citas = []
+
+    return render(request, 'cita/mis_citas.html', {'citas': citas})
 
 @login_required
 def activar_cita(request, cita_id):
@@ -51,20 +72,27 @@ def seleccionar_cita(request):
 
 # region listar_citas_activas
 def listar_citas_activas(request):
-    ahora = localtime(now()).replace(tzinfo=None)  # 🕒 Hora local sin timezone
+    ahora = localtime(now()).replace(tzinfo=None)
     limite = ahora - timedelta(minutes=20)
 
-    citas = Cita.objects.filter(is_active=True)
+    if request.user.persona:
+        persona_actual = request.user.persona
+        try:
+            empleado_actual = Empleado.objects.get(id_persona=persona_actual)
+        except Empleado.DoesNotExist:
+            empleado_actual = None
+    else:
+        empleado_actual = None
+
     citas_visibles = []
 
-    for cita in citas:
-        if cita.fecha and cita.hora:
-            cita_datetime = datetime.combine(cita.fecha, cita.hora)
-
-            print(f"FECHA: {cita.fecha}, HORA: {cita.hora}, COMBINADO: {cita_datetime}, LIMITE: {limite}")  # debug
-
-            if cita_datetime >= limite:
-                citas_visibles.append(cita)
+    if empleado_actual:
+        citas = Cita.objects.filter(is_active=True, id_empleado=empleado_actual)
+        for cita in citas:
+            if cita.fecha and cita.hora:
+                cita_datetime = datetime.combine(cita.fecha, cita.hora)
+                if cita_datetime >= limite:
+                    citas_visibles.append(cita)
 
     return render(request, 'cita/listar_citas_activas.html', {'citas': citas_visibles})
 # region usuario
@@ -449,55 +477,58 @@ def eliminar_sala(request, sala_id):
     return redirect('listar_salas')
 
 
-# region Examenes
-
-
-def crear_examen(request):
-    if request.method == 'POST':
-        form = ExamenForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('listar_examenes')
-    else:
-        form = ExamenForm()
-    return render(request, 'examen/crear_examen.html', {'form': form})
-
-def listar_examenes(request):
-    examenes = Examen.objects.all()
-    return render(request, 'examen/listar_examenes.html', {'examenes': examenes})
-
-def actualizar_examen(request, examen_id):
-    examen = get_object_or_404(Examen, id=examen_id)
-    if request.method == 'POST':
-        form = ExamenForm(request.POST, instance=examen)
-        if form.is_valid():
-            form.save()
-            return redirect('listar_examenes')
-    else:
-        form = ExamenForm(instance=examen)
-    return render(request, 'examen/actualizar_examen.html', {'form': form})
-
-def eliminar_examen(request, examen_id):
-    examen = get_object_or_404(Examen, id=examen_id)
-    examen.delete()
-    return redirect('listar_examenes')
-
-
 # region Diagnosticos
 
-def crear_diagnostico(request):
+def crear_diagnostico(request, consulta_id):
+    consulta = get_object_or_404(Consulta, id=consulta_id)
+
     if request.method == 'POST':
-        form = DiagnosticoForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('listar_diagnosticos')
+        diagnostico_form = DiagnosticoForm(request.POST)
+        formula_form = FormulaForm(request.POST)
+        medicamento_form = MedicamentoForm(request.POST)
+
+        if diagnostico_form.is_valid() and formula_form.is_valid() and medicamento_form.is_valid():
+            # Guardamos el diagnóstico primero
+            diagnostico = diagnostico_form.save()
+
+            # Asignamos el diagnóstico a la consulta
+            consulta.id_diagnostico = diagnostico
+            consulta.save()
+
+            # Guardamos el medicamento
+            medicamento = medicamento_form.save()
+
+            # Creamos y guardamos la fórmula
+            formula = formula_form.save(commit=False)
+            formula.id_diagnostico = diagnostico
+            formula.mid_nombre_medicamento = medicamento
+            formula.save()
+
+            return redirect('listar_citas_activas')
     else:
-        form = DiagnosticoForm()
-    return render(request, 'diagnostico/crear_diagnostico.html', {'form': form})
+        diagnostico_form = DiagnosticoForm()
+        formula_form = FormulaForm()
+        medicamento_form = MedicamentoForm()
+
+    context = {
+        'consulta': consulta,
+        'diagnostico_form': diagnostico_form,
+        'formula_form': formula_form,
+        'medicamento_form': medicamento_form,
+    }
+
+    return render(request, 'diagnostico/crear_diagnostico.html', context)
+
 
 def listar_diagnosticos(request):
     diagnosticos = Diagnostico.objects.all()
-    return render(request, 'diagnostico/listar_diagnosticos.html', {'diagnosticos': diagnosticos})
+    consulta = Consulta.objects.first()  # o como quieras obtenerla
+
+    context = {
+        'diagnosticos': diagnosticos,
+        'consulta': consulta,
+    }
+    return render(request, 'diagnostico/listar_diagnosticos.html', context)
 
 def actualizar_diagnostico(request, diagnostico_id):
     diagnostico = get_object_or_404(Diagnostico, id=diagnostico_id)
@@ -561,15 +592,15 @@ def crear_exploracion_fisica(request):
         form = ExploracionFisicaForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('listar_exploraciones')
+            return redirect('listar_exploracion_fisica')
     else:
         form = ExploracionFisicaForm()
-    return render(request, 'exploracion/crear_exploracion.html', {'form': form})
+    return render(request, 'exploracion_fisica/crear_exploracion_fisica.html', {'form': form})
 
 # listar ecploracion fisica
 def listar_exploraciones_fisica(request):
     exploraciones = ExploracionFisica.objects.all()
-    return render(request, 'exploracion/listar_exploraciones.html', {'exploraciones': exploraciones})
+    return render(request, 'exploracion_fisica/listar_exploracion_fisica.html', {'exploraciones': exploraciones})
 
 def actualizar_exploracion_fisica(request, exploracion_id):
     exploracion = get_object_or_404(ExploracionFisica, id=exploracion_id)
@@ -577,7 +608,7 @@ def actualizar_exploracion_fisica(request, exploracion_id):
         form = ExploracionFisicaForm(request.POST, instance=exploracion)
         if form.is_valid():
             form.save()
-            return redirect('listar_exploraciones')
+            return redirect('listar_exploracion_fisica')
     else:
         form = ExploracionFisicaForm(instance=exploracion)
     return render(request, 'exploracion/actualizar_exploracion.html', {'form': form})
@@ -590,15 +621,39 @@ def eliminar_exploracion_fisica(request, exploracion_id):
 # region Consultas
 
 # crear consulta
-def crear_consulta(request):
+def crear_consulta(request, cita_id):
+    cita = get_object_or_404(Cita, id=cita_id)
+    medico = cita.id_empleado
+
     if request.method == 'POST':
-        form = ConsultaForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('listar_consultas')
+        consulta_form = ConsultaForm(request.POST)
+        anamnesis_form = AnamnesisForm(request.POST)
+        exploracion_form = ExploracionFisicaForm(request.POST)
+
+        if consulta_form.is_valid() and anamnesis_form.is_valid() and exploracion_form.is_valid():
+            anamnesis = anamnesis_form.save()
+            exploracion = exploracion_form.save(commit=False)
+            exploracion.id_anamnesis = anamnesis
+            exploracion.save()
+
+            consulta = consulta_form.save(commit=False)
+            consulta.medico = medico
+            consulta.cita = cita
+            consulta.id_anamnesis = anamnesis
+            consulta.id_exploracion = exploracion
+            consulta.save()
+            return redirect('crear_diagnostico', consulta_id=consulta.id)  # O el paso siguiente que tengas
     else:
-        form = ConsultaForm()
-    return render(request, 'consulta/crear_consulta.html', {'form': form})
+        consulta_form = ConsultaForm(initial={'medico': medico, 'cita': cita})
+        anamnesis_form = AnamnesisForm()
+        exploracion_form = ExploracionFisicaForm()
+
+    context = {
+        'consulta_form': consulta_form,
+        'anamnesis_form': anamnesis_form,
+        'exploracion_form': exploracion_form
+    }
+    return render(request, 'consulta/crear_consulta.html', context)
 
 # listar consultas
 def listar_consultas(request):
@@ -732,3 +787,60 @@ def eliminar_historia_clinica(request, historia_id):
     historia = get_object_or_404(Historia_clinica, id=historia_id)
     historia.delete()
     return redirect('listar_historias_clinicas')
+
+def ver_historia_clinica(request, persona_id):
+    persona = get_object_or_404(Persona, id=persona_id)
+
+    consultas = Consulta.objects.filter(
+        cita__persona=persona
+    ).select_related(
+        'cita', 'id_anamnesis', 'id_diagnostico'
+    ).order_by('-fecha')
+
+    context = {
+        'persona': persona,
+        'consultas': consultas,
+    }
+    return render(request, 'historia_clinica/historia_clinica.html', context)
+
+def detalle_consulta(request, consulta_id):
+    consulta = get_object_or_404(Consulta, id=consulta_id)
+    anamnesis = consulta.id_anamnesis
+    diagnostico = consulta.id_diagnostico
+
+    exploracion = ExploracionFisica.objects.filter(id_anamnesis=anamnesis).first()
+
+    formulas = Formula.objects.none()
+    if diagnostico:
+        formulas = Formula.objects.filter(id_diagnostico=diagnostico).select_related('mid_nombre_medicamento')
+
+    context = {
+        'consulta': consulta,
+        'anamnesis': anamnesis,
+        'diagnostico': diagnostico,
+        'exploracion': exploracion,
+        'formulas': formulas,
+    }
+    return render(request, 'consulta/detalle_consulta.html', context)
+
+
+def obtener_medico_por_cita(request):
+    cita_id = request.GET.get('cita_id')
+    try:
+        cita = Cita.objects.get(id=cita_id)
+        medico_nombre = str(cita.id_empleado.id_persona)  # Mostramos nombre del médico
+        return JsonResponse({'medico': medico_nombre})
+    except Cita.DoesNotExist:
+        return JsonResponse({'error': 'Cita no encontrada'}, status=404)
+    
+def empleados_por_especialidad(request):
+    especialidad = request.GET.get('especialidad', '')
+    empleados = Empleado.objects.filter(especialidades=especialidad, estado='Activo')  # Filtrar por especialidad y estado activo
+
+    # Obtener el formato de datos para enviar como respuesta
+    empleados_data = [{
+        'id': empleado.id,
+        'nombre': f'{empleado.id_persona.nombre} {empleado.id_persona.apellido}'  # Nombre completo del empleado
+    } for empleado in empleados]
+
+    return JsonResponse(empleados_data, safe=False)

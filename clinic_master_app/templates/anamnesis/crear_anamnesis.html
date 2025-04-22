@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
-{% block title %}Crear Anamnesis{% endblock %}
+{% block title %}Registrar Anamnesis{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>Crear Anamnesis</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Guardar</button>
-        <a href="{% url 'listar_anamnesis' %}" class="btn btn-secondary">Cancelar</a>
-    </form>
-</div>
+<h2>Registrar Anamnesis</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-primary">Siguiente: Diagnóstico</button>
+    <a href="{% url 'listar_consultas' %}" class="btn btn-secondary">Cancelar</a>
+</form>
 {% endblock %}

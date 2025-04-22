@@ -1,0 +1,31 @@
+{% extends "persona.html" %}
+
+{% block title %}Mis Citas{% endblock %}
+
+{% block content %}
+<h2>Mis Citas</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Descripción</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cita in citas %}
+        <tr>
+            <td>{{ cita.id }}</td>
+            <td>{{ cita.fecha }}</td>
+            <td>{{ cita.hora }}</td>
+            <td>{{ cita.descripcion }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No tienes citas registradas.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

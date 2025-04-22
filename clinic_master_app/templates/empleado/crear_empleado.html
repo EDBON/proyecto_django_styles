@@ -3,6 +3,21 @@
 {% block title %}Crear Empleado{% endblock %}
 
 {% block content %}
+<!-- CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- Inicializar Select2 -->
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+</script>
+
+
 <div class="container">
     <h2>Crear Empleado</h2>
     <form method="POST">

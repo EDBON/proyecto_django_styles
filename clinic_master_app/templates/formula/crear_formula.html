@@ -12,4 +12,18 @@
         <a href="{% url 'listar_formulas' %}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+
+<script>
+    flatpickr(".flatpickr", {
+        dateFormat: "Y-m-d",  // Formato de la fecha
+        altInput: true,       // Muestra el valor en un formato más amigable
+        altFormat: "F j, Y",  // Formato alternativo (Ej: 20 de Marzo de 2025)
+        locale: "es",         // Cambia el idioma al español
+        minDate: "today",     // Restringe fechas anteriores a hoy
+        maxDate: new Date().fp_incr(5 * 365) // Máximo: 5 años desde hoy
+    });
+</script>
 {% endblock %}

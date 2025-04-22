@@ -10,6 +10,20 @@ TIPO_DOC = [
     ('CE', 'Cédula de Extranjería'),
 ]
 
+MEDICAMENTOS = [
+    ('ninguno', 'Ninguno'),
+    ('acetaminofen', 'Acetaminofén'),
+    ('ibuprofeno', 'Ibuprofeno'),
+    ('amoxicilina', 'Amoxicilina'),
+    ('loratadina', 'Loratadina'),
+    ('omeprazol', 'Omeprazol'),
+    ('salbutamol', 'Salbutamol'),
+    ('metformina', 'Metformina'),
+    ('losartán', 'Losartán'),
+    ('enalapril', 'Enalapril'),
+]
+
+
 GENERO = [
     ('M', 'Masculino'),
     ('F', 'Femenino'),
@@ -197,7 +211,7 @@ class Cita(models.Model):
     persona = models.ForeignKey(Persona, on_delete=models.CASCADE, null=True,blank=True)
     hora = models.TimeField()
     fecha = models.DateField()
-    tipo = models.CharField(max_length=100)
+    tipo = models.CharField(max_length=100, choices=ESPECIALIDADES) 
     is_active = models.BooleanField(default=True)
     id_empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE, null=True)
 
@@ -217,21 +231,12 @@ class Sala(models.Model):
     capacidad_sala = models.CharField(max_length=100)
     horario_disponible = models.DateTimeField(max_length=100)
 
-
-#region Examen
-class Examen(models.Model):
-    tipo_examen = models.CharField(max_length=100)
-    resultado_examen = models.TextField()
-    observacion_examen = models.TextField(max_length=100)
-
-
 #region Diagnostico     
 class Diagnostico(models.Model):
     diagnostico_principal = models.TextField()
     pruebas_complementarias = models.TextField()
     interpretacion_examen = models.CharField(max_length=100)
     diagnostico_final = models.TextField()
-    id_examen = models.ForeignKey(Examen, on_delete=models.CASCADE, null=True)
 
 #region Medicamento
 class Medicamento(models.Model):
@@ -252,8 +257,13 @@ class Anamnesis(models.Model):
     trabajo = models.TextField()
     fuma = models.TextField()
     ejercicio = models.TextField()
-    medicamentos = models.ForeignKey(Medicamento, on_delete=models.CASCADE, null=True)
-    
+    medicamentos = models.CharField(
+        max_length=50,
+        choices=MEDICAMENTOS,
+        default='ninguno',
+        null=True,
+        blank=True
+    )
     
 #region Exploracion Fisica
 class ExploracionFisica(models.Model):
@@ -285,7 +295,7 @@ class Formula(models.Model):
     descripcion = models.TextField()
     id_diagnostico = models.ForeignKey(Diagnostico, on_delete=models.CASCADE, null=True)
     mid_nombre_medicamento = models.ForeignKey(Medicamento, on_delete=models.CASCADE, null=True)
-    fecha_expiracion  = models.DateField(max_length=100)
+    fecha_expiracion  = models.DateField()
     recomendaciones_medicas = models.TextField()   
 
 

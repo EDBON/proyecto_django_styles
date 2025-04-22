@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container">
     <h2>Lista de Diagnósticos</h2>
-    <a href="{% url 'crear_diagnostico' %}" class="btn btn-success mb-3">Añadir Diagnóstico</a>
+    <a href="{% url 'crear_diagnostico' consulta.id %}" class="btn btn-success mb-3">Añadir Diagnóstico</a>
     <table class="table table-striped">
         <thead>
             <tr>

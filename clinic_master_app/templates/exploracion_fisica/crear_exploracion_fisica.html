@@ -9,7 +9,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Guardar</button>
-        <a href="{% url 'listar_exploraciones_fisicas' %}" class="btn btn-secondary">Cancelar</a>
+        <a href="{% url 'listar_citas_activas' %}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
 {% endblock %}

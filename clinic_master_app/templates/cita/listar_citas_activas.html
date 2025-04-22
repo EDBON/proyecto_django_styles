@@ -24,8 +24,13 @@
                     <td>{{ cita.tipo }}</td>
                     <td>{{ cita.id_empleado }}</td>
                     <td>
-                        <a href="{% url 'actualizar_cita' cita.id %}" class="btn btn-warning">Editar</a>
-                        <a href="{% url 'crear_consulta' %}" class="btn btn-warning">iniciar consulta</a>
+                        <a href="{% url 'crear_consulta' cita.id %}" class="btn btn-success mb-3">Iniciar Consulta</a>
+                        {% if cita.persona %}
+    <a href="{% url 'ver_historia_clinica' cita.persona.id %}" class="btn btn-info mb-3">Historia Clínica</a>
+{% else %}
+    <span class="text-danger">Sin paciente asignado</span>
+{% endif %}
+
                     </td>
                 </tr>
                 

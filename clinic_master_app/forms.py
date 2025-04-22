@@ -32,6 +32,9 @@ class UsuarioForm(UserCreationForm):
     class Meta:
         model = Usuario
         fields = ["persona","username", "puesto_empresa", "password1", "password2"]
+        widgets = {
+            'persona': forms.Select(attrs={'class': 'select2 form-select'}),
+        }
 
 class UsuarioUpdateForm(UserChangeForm):
     password = None  # Oculta el campo de contraseña
@@ -77,14 +80,22 @@ class EmpleadoForm(forms.ModelForm):
     class Meta:
         model = Empleado
         fields = '__all__'
+        widgets = {
+            'area_trabajo': forms.Select(attrs={'class': 'select2 form-select'}),
+            'especialidades': forms.Select(attrs={'class': 'select2 form-select'}),
+            'id_persona': forms.Select(attrs={'class': 'select2 form-select'}),
+        }
+
 
 # region cita form
 class CitaForm(forms.ModelForm):
     class Meta:
         model = Cita
         fields = '__all__'
-        widgets = {            
+        widgets = { 
             
+            'persona': forms.Select(attrs={'class': 'select2 form-select'}),
+            'id_empleado': forms.Select(attrs={'class': 'select2 form-select'}),
             'fecha': forms.DateInput(
                 format='%Y-%m-%d',
                 attrs={'class': 'flatpickr'}
@@ -114,13 +125,6 @@ class SalaForm(forms.ModelForm):
         fields = '__all__'
 
 
-# region examen form
-class ExamenForm(forms.ModelForm):
-    
-    class Meta:
-        model = Examen
-        fields = '__all__'
-
 # region diagnostico form
 class DiagnosticoForm(forms.ModelForm):
     class Meta:
@@ -138,12 +142,41 @@ class ExploracionFisicaForm(forms.ModelForm):
     class Meta:
         model = ExploracionFisica
         fields = '__all__'
+        exclude = ['id_anamnesis']
 
 # region consulta form
 class ConsultaForm(forms.ModelForm):
     class Meta:
         model = Consulta
         fields = '__all__'
+        exclude = ['id_anamnesis', 'id_diagnostico']
+        widgets = {            
+            
+            'fecha': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={'class': 'flatpickr'}
+            ),
+            }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Mostrar el nombre del médico y cita como texto plano
+        if self.instance and self.instance.pk:
+            # Mostrar el nombre del médico en lugar del <select>
+            self.fields['medico'].widget = forms.TextInput(attrs={
+                'readonly': 'readonly',
+                'class': 'form-control-plaintext'
+            })
+            self.fields['medico'].initial = str(self.instance.medico)
+
+            # Mostrar la cita como texto plano
+            self.fields['cita'].widget = forms.TextInput(attrs={
+                'readonly': 'readonly',
+                'class': 'form-control-plaintext'
+            })
+            self.fields['cita'].initial = str(self.instance.cita)
+
 
 # region medicamento form
 class MedicamentoForm(forms.ModelForm):
@@ -156,6 +189,14 @@ class FormulaForm(forms.ModelForm):
     class Meta:
         model = Formula
         fields = '__all__'
+        exclude = ['id_diagnostico', 'mid_nombre_medicamento']
+        widgets = {            
+            
+            'fecha_expiracion': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={'class': 'flatpickr'}
+            ),
+        }
 
 # region historia clinica form
 class HistoriaClinicaForm(forms.ModelForm):
