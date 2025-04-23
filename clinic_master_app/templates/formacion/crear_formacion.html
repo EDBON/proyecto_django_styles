@@ -12,4 +12,20 @@
         <a href="{% url 'listar_formaciones' %}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
+<!-- Flatpickr CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+<!-- Activación de Flatpickr -->
+<script>
+    flatpickr(".flatpickr", {
+        dateFormat: "Y-m-d",  // Formato de la fecha (AAAA-MM-DD)
+        altInput: true,       // Muestra el valor en un formato más amigable
+        altFormat: "F j, Y",  // Formato alternativo (Ej: March 20, 2025)
+        locale: "es",          // Cambia el idioma al español
+        maxDate: new Date(),    // Máximo: hoy (año actual)
+    });
+</script>
+
 {% endblock %}

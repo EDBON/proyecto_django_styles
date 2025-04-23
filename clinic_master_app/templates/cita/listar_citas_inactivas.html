@@ -12,6 +12,7 @@
                     <th>Hora</th>
                     <th>Fecha</th>
                     <th>Tipo</th>
+                    <th><strong>Sala</strong></th>
                     <th>Empleado</th>
                     <th>Acciones</th>
                 </tr>
@@ -22,9 +23,9 @@
                     <td>{{ cita.hora }}</td>
                     <td>{{ cita.fecha }}</td>
                     <td>{{ cita.tipo }}</td>
+                    <td>{{ cita.sala }}</td> 
                     <td>{{ cita.id_empleado }}</td>
                     <td>
-                        <a href="{% url 'actualizar_cita' cita.id %}" class="btn btn-warning">Editar</a>
                         <a href="{% url 'activar_cita' cita.id %}" class="btn btn-success">Activar</a>
                     </td>
                 </tr>

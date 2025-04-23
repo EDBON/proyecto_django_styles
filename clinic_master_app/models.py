@@ -206,17 +206,7 @@ class Contrato(models.Model):
 
 
 
-#region Cita
-class Cita(models.Model):
-    persona = models.ForeignKey(Persona, on_delete=models.CASCADE, null=True,blank=True)
-    hora = models.TimeField()
-    fecha = models.DateField()
-    tipo = models.CharField(max_length=100, choices=ESPECIALIDADES) 
-    is_active = models.BooleanField(default=True)
-    id_empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE, null=True)
 
-    def __str__(self):
-        return f'Cita de {self.persona.nombre} el {self.fecha} a las {self.hora}'
 #region Procedimiento
 class Procedimiento(models.Model):
     nombre_procedimiento = models.CharField(max_length=50)
@@ -229,7 +219,25 @@ class Sala(models.Model):
     nombre_sala = models.CharField(max_length=50)
     ubicacion_sala = models.CharField(max_length=100)
     capacidad_sala = models.CharField(max_length=100)
-    horario_disponible = models.DateTimeField(max_length=100)
+    disponibilidad_inicio = models.TimeField(null=True, blank=True)
+    disponibilidad_fin = models.TimeField(null=True, blank=True)
+    
+    def __str__(self):
+        return f'Sala{self.ubicacion_sala}'
+
+
+#region Cita
+class Cita(models.Model):
+    persona = models.ForeignKey(Persona, on_delete=models.CASCADE, null=True,blank=True)
+    sala= models.ForeignKey(Sala,on_delete=models.CASCADE,null=True,blank=True )
+    hora = models.TimeField()
+    fecha = models.DateField()
+    tipo = models.CharField(max_length=100, choices=ESPECIALIDADES) 
+    is_active = models.BooleanField(default=True)
+    id_empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return f'Cita de {self.persona.nombre} el {self.fecha} a las {self.hora}'
 
 #region Diagnostico     
 class Diagnostico(models.Model):

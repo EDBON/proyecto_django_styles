@@ -71,7 +71,7 @@ urlpatterns = [
 
     # region Rutas para Formacion
     path('crear_formacion/', views.crear_formacion, name='crear_formacion'),
-    path('listar_formacion/', views.listar_formaciones, name='listar_formacion'),
+    path('listar_formacion/', views.listar_formaciones, name='listar_formaciones'),
     path('actualizar_formacion/<int:formacion_id>/', views.actualizar_formacion, name='actualizar_formacion'),
     path('eliminar_formacion/<int:formacion_id>/', views.eliminar_formacion, name='eliminar_formacion'),
 
@@ -95,7 +95,7 @@ urlpatterns = [
 
     #region  Rutas para Sala
     path('crear_sala/', views.crear_sala, name='crear_sala'),
-    path('listar_sala/', views.listar_salas, name='listar_sala'),
+    path('listar_sala/', views.listar_salas, name='listar_salas'),
     path('actualizar_sala/<int:sala_id>/', views.actualizar_sala, name='actualizar_sala'),
     path('eliminar_sala/<int:sala_id>/', views.eliminar_sala, name='eliminar_sala'),
 

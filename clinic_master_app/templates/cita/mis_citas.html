@@ -10,6 +10,7 @@
             <th>ID</th>
             <th>Fecha</th>
             <th>Hora</th>
+            <th><strong>Ubicacion</strong></th>
             <th>Descripción</th>
         </tr>
     </thead>
@@ -19,6 +20,13 @@
             <td>{{ cita.id }}</td>
             <td>{{ cita.fecha }}</td>
             <td>{{ cita.hora }}</td>
+            <td>
+                {% if cita.sala %}
+                    {{ cita.sala.ubicacion_sala }}
+                {% else %}
+                    Sin sala asignada
+                {% endif %}
+            </td>
             <td>{{ cita.descripcion }}</td>
         </tr>
         {% empty %}

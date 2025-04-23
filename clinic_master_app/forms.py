@@ -73,6 +73,18 @@ class FormacionForm(forms.ModelForm):
     class Meta:
         model = Formacion
         fields = '__all__'
+        widgets = { 
+            
+            'fecha_inicio': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={'class': 'flatpickr'}
+            ),
+            'fecha_fin': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={'class': 'flatpickr'}
+            ),
+            
+        }
 
 
 # region empleado form
@@ -123,6 +135,25 @@ class SalaForm(forms.ModelForm):
     class Meta:
         model = Sala
         fields = '__all__'
+        widgets = { 
+            'disponibilidad_inicio': forms.TimeInput(
+                format='%H:%M',  # ✅ 24 horas con formato 00:00
+                attrs={
+                    'class': 'flatpickr-time',
+                    'placeholder': '00:00',
+                    'style': 'width: 180px; font-size: 16px; padding: 5px; text-align: center;',
+                }
+            ),
+            'disponibilidad_fin': forms.TimeInput(
+                format='%H:%M',  # ✅ 24 horas con formato 00:00
+                attrs={
+                    'class': 'flatpickr-time',
+                    'placeholder': '00:00',
+                    'style': 'width: 180px; font-size: 16px; padding: 5px; text-align: center;',
+                }
+            ),
+            
+        }
 
 
 # region diagnostico form
