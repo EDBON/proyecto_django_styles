@@ -98,4 +98,40 @@ class EmpleadoForm(forms.ModelForm):
             'id_persona': forms.Select(attrs={'class': 'select2 form-select'}),
         }
 
+# region documento_empleado form
+class DocumentoEmpleadoForm(forms.ModelForm):
+    class Meta:
+        model = DocumentosEmpleado
+        fields = '__all__'
+        widgets = {
+            'empleado': forms.Select(attrs={'class': 'select2 form-select'}),
+            'fecha': forms.DateInput(attrs={'class': 'flatpickr'}),
+        }
+# region historial_movimiento form
+class HistorialMovimientoForm(forms.ModelForm):
+    class Meta:
+        model = HistorialMovimientos
+        fields = '__all__'
+        widgets = {
+            'empleado': forms.Select(attrs={'class': 'select2 form-select'}),
+            'fecha_movimiento': forms.DateInput(attrs={'class': 'flatpickr'}),
+        }
 
+# region relacion_jerarquica form
+class RelacionJerarquicaForm(forms.ModelForm):
+    class Meta:
+        model = RelacionesJerarquicas
+        fields = '__all__'
+        widgets = {
+            'supervisor': forms.Select(attrs={'class': 'select2 form-select'}),
+            'subordinado': forms.Select(attrs={'class': 'select2 form-select'}),
+        }
+# region cargo form
+class CargoForm(forms.ModelForm):
+    class Meta:
+        model = Cargo
+        fields = '__all__'
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }

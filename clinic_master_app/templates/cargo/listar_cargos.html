@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Lista de Cargos</h2>
+    <a href="{% url 'crear_cargo' %}" class="btn btn-primary mb-3">Crear Cargo</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cargo in cargos %}
+            <tr>
+                <td>{{ cargo.nombre }}</td>
+                <td>{{ cargo.descripcion }}</td>
+                <td>
+                    <a href="{% url 'editar_cargo' cargo.id %}" class="btn btn-sm btn-warning">Editar</a>
+                    <a href="{% url 'eliminar_cargo' cargo.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3">No hay cargos registrados.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -73,6 +73,28 @@ urlpatterns = [
     path('listar_empleado/', views.listar_empleados, name='listar_empleados'),
     path('actualizar_empleado/<int:empleado_id>/', views.actualizar_empleado, name='actualizar_empleado'),
     path('eliminar_empleado/<int:empleado_id>/', views.eliminar_empleado, name='eliminar_empleado'),
+    
+    # /// nuevo
+    # region Rutas para DocumentosEmpleado
+    path('crear_documento_empleado/', views.crear_documento_empleado, name='crear_documento_empleado'),
+    path('listar_documentos_empleado/', views.listar_documentos_empleado, name='listar_documentos_empleado'),
+    path('eliminar_documento_empleado/<int:documento_id>/', views.eliminar_documento_empleado, name='eliminar_documento_empleado'),
+
+    # region Rutas para HistorialMovimientos
+    path('crear_movimiento/', views.crear_movimiento, name='crear_movimiento'),
+    path('listar_movimientos/', views.listar_movimientos, name='listar_movimientos'),
+
+    # region Rutas para RelacionesJerarquicas
+    path('crear_relacion_jerarquica/', views.crear_relacion_jerarquica, name='crear_relacion_jerarquica'),
+    path('listar_relaciones_jerarquicas/', views.listar_relaciones_jerarquicas, name='listar_relaciones_jerarquicas'),
+    path('eliminar_relacion_jerarquica/<int:relacion_id>/', views.eliminar_relacion_jerarquica, name='eliminar_relacion_jerarquica'),
+
+    # region Rutas para Cargos
+    path('crear_cargo/', views.crear_cargo, name='crear_cargo'),
+    path('listar_cargos/', views.listar_cargos, name='listar_cargos'),
+    path('actualizar_cargo/<int:cargo_id>/', views.actualizar_cargo, name='actualizar_cargo'),
+    path('eliminar_cargo/<int:cargo_id>/', views.eliminar_cargo, name='eliminar_cargo'),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

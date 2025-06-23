@@ -201,3 +201,36 @@ class Contrato(models.Model):
     @property
     def archivo_nombre(self):
         return os.path.basename(self.documento_contrato.name).replace("None_", "")
+    
+# region documetnos_empleado
+class DocumentosEmpleado(models.Model):
+    id_empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+    tipo_documento = models.CharField(max_length=100)
+    nombre_documento = models.CharField(max_length=100)
+    archivo = models.FileField(upload_to='documentos_empleado/')
+    fecha_subida = models.DateField(auto_now_add=True)
+    subido_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return f"{self.nombre_documento} - {self.id_empleado}"
+    
+class HistorialMovimientos(models.Model):
+    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+    area_anterior = models.CharField(max_length=100)
+    estado_anterior = models.CharField(max_length=100)
+    area_nueva = models.CharField(max_length=100)
+    estado_nuevo = models.CharField(max_length=100)
+    motivo = models.TextField()
+    fecha_movimiento = models.DateField(auto_now_add=True)
+    registrado_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return f"Movimiento {self.empleado} - {self.fecha_movimiento}"
+class RelacionesJerarquicas(models.Model):
+    jefe = models.ForeignKey(Empleado, on_delete=models.CASCADE, related_name='subordinados')
+    subordinado = models.ForeignKey(Empleado, on_delete=models.CASCADE, related_name='jefes')
+    fecha_inicio = models.DateField()
+    fecha_fin = models.DateField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Jefe: {self.jefe} -> Sub: {self.subordinado}"

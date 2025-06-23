@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Documentos de Empleados</h2>
+    <a href="{% url 'crear_documento_empleado' %}" class="btn btn-primary mb-3">Crear Documento</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Empleado</th>
+                <th>Nombre Documento</th>
+                <th>Archivo</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for doc in documentos %}
+            <tr>
+                <td>{{ doc.empleado }}</td>
+                <td>{{ doc.nombre }}</td>
+                <td><a href="{{ doc.archivo.url }}">Ver</a></td>
+                <td>{{ doc.fecha }}</td>
+                <td>
+                    <a href="{% url 'editar_documento_empleado' doc.id %}" class="btn btn-sm btn-warning">Editar</a>
+                    <a href="{% url 'eliminar_documento_empleado' doc.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5">No hay documentos registrados.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

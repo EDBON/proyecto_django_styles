@@ -281,16 +281,97 @@ def eliminar_empleado(request, empleado_id):
     empleado.delete()
     return redirect('listar_empleados')
 
+# ///////nuevo
+# crear_documento_empleado
+def crear_documento_empleado(request):
+    if request.method == 'POST':
+        form = DocumentoEmpleadoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_documentos_empleado')
+    else:
+        form = DocumentoEmpleadoForm()
+    return render(request, 'documento_empleado/crear_documento_empleado.html', {'form': form})
 
+# listar_documentos_empleado
+def listar_documentos_empleado(request):
+    documentos = DocumentosEmpleado.objects.all()
+    return render(request, 'documento_empleado/listar_documentos_empleado.html', {'documentos': documentos})
 
-# region Usuario
+# eliminar_documento_empleado
+def eliminar_documento_empleado(request, documento_id):
+    documento = get_object_or_404(DocumentoEmpleadoForm, id=documento_id)
+    documento.delete()
+    return redirect('listar_documentos_empleado')
 
+# crear_movimiento
+def crear_movimiento(request):
+    if request.method == 'POST':
+        form = HistorialMovimientos(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_movimientos')
+    else:
+        form = HistorialMovimientoForm()
+    return render(request, 'historial_movimiento/crear_historial_movimiento.html', {'form': form})
 
+# listar_movimientos
+def listar_movimientos(request):
+    movimientos = HistorialMovimientos.objects.all()
+    return render(request, 'historial_movimiento/listar_movimientos.html', {'movimientos': movimientos})
 
+# crear_relacion_jerarquica
+def crear_relacion_jerarquica(request):
+    if request.method == 'POST':
+        form = RelacionJerarquicaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_relaciones_jerarquicas')
+    else:
+        form = RelacionJerarquicaForm()
+    return render(request, 'relacion_jerarquica/crear_relacion_jerarquica.html', {'form': form})
 
+# listar_relaciones_jerarquicas
+def listar_relaciones_jerarquicas(request):
+    relaciones = RelacionesJerarquicas.objects.all()
+    return render(request, 'relacion_jerarquica/listar_relaciones.html', {'relaciones': relaciones})
 
+# eliminar_relacion_jerarquica
+def eliminar_relacion_jerarquica(request, relacion_id):
+    relacion = get_object_or_404(RelacionesJerarquicas, id=relacion_id)
+    relacion.delete()
+    return redirect('listar_relaciones_jerarquicas')
 
+# crear_cargo
+def crear_cargo(request):
+    if request.method == 'POST':
+        form = CargoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_cargos')
+    else:
+        form = CargoForm()
+    return render(request, 'cargo/crear_cargo.html', {'form': form})
 
-# region Salas
+# listar_cargos
+def listar_cargos(request):
+    cargos = Cargo.objects.all()
+    return render(request, 'cargo/listar_cargos.html', {'cargos': cargos})
 
+# actualizar_cargo
+def actualizar_cargo(request, cargo_id):
+    cargo = get_object_or_404(Cargo, id=cargo_id)
+    if request.method == 'POST':
+        form = CargoForm(request.POST, instance=cargo)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_cargos')
+    else:
+        form = CargoForm(instance=cargo)
+    return render(request, 'cargo/actualizar_cargo.html', {'form': form})
 
+# eliminar_cargo
+def eliminar_cargo(request, cargo_id):
+    cargo = get_object_or_404(Cargo, id=cargo_id)
+    cargo.delete()
+    return redirect('listar_cargos')

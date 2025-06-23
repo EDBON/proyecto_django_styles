@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Historial de Movimientos</h2>
+    <a href="{% url 'crear_movimiento' %}" class="btn btn-primary mb-3">Registrar Movimiento</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Empleado</th>
+                <th>Tipo</th>
+                <th>Descripción</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mov in movimientos %}
+            <tr>
+                <td>{{ mov.empleado }}</td>
+                <td>{{ mov.tipo_movimiento }}</td>
+                <td>{{ mov.descripcion }}</td>
+                <td>{{ mov.fecha_movimiento }}</td>
+                <td>
+                    <a href="{% url 'editar_historial_movimiento' mov.id %}" class="btn btn-sm btn-warning">Editar</a>
+                    <a href="{% url 'eliminar_historial_movimiento' mov.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5">No hay movimientos registrados.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
