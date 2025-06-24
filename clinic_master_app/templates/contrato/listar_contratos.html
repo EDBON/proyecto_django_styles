@@ -20,10 +20,11 @@
             <tr>
                 <td>{{ contrato.salario }}</td>
                 <td>{{ contrato.tipo_contrato }}</td>
-                <td>    
-                    {% if paciente.archivo %}
-                    <a href="{{ paciente.archivo.url }}" target="_blank">
-                        {{ paciente.archivo_nombre }}
+                <td>
+                    {% if contrato.documento_contrato %}
+                    <a href="{{ contrato.documento_contrato.url }}" target="_blank">
+                        {{ contrato.archivo_nombre }}
+                    </a>
                     {% else %}
                     No hay archivo
                     {% endif %}

@@ -3,6 +3,12 @@
 {% block title %}Crear Contrato{% endblock %}
 
 {% block content %}
+<!-- Cargar el CSS de flatpickr -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<!-- Cargar el JS de flatpickr -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 <div class="container">
     <h2>Crear Contrato</h2>
     <form method="POST">
@@ -12,5 +18,15 @@
         <a href="{% url 'listar_contratos' %}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Inicializa flatpickr para los campos con la clase 'flatpickr'
+        flatpickr('.flatpickr', {
+            dateFormat: "Y-m-d",  // Asegura que el formato de la fecha sea YYYY-MM-DD
+            disableMobile: true,   // Opcional: Para desactivar la interfaz móvil de flatpickr
+        });
+    });
+</script>
 
 {% endblock %}

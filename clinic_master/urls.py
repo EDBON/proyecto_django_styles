@@ -83,12 +83,13 @@ urlpatterns = [
     # region Rutas para HistorialMovimientos
     path('crear_movimiento/', views.crear_movimiento, name='crear_movimiento'),
     path('listar_movimientos/', views.listar_movimientos, name='listar_movimientos'),
+    
 
     # region Rutas para RelacionesJerarquicas
     path('crear_relacion_jerarquica/', views.crear_relacion_jerarquica, name='crear_relacion_jerarquica'),
     path('listar_relaciones_jerarquicas/', views.listar_relaciones_jerarquicas, name='listar_relaciones_jerarquicas'),
     path('eliminar_relacion_jerarquica/<int:relacion_id>/', views.eliminar_relacion_jerarquica, name='eliminar_relacion_jerarquica'),
-
+    path('editar_relacion_jerarquica/<int:pk>/', views.editar_relacion_jerarquica, name='editar_relacion_jerarquica'),
     # region Rutas para Cargos
     path('crear_cargo/', views.crear_cargo, name='crear_cargo'),
     path('listar_cargos/', views.listar_cargos, name='listar_cargos'),
@@ -98,5 +99,3 @@ urlpatterns = [
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-# ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -116,6 +116,7 @@ class Eps(models.Model):
 #region Cargo
 class Cargo(models.Model):
     nombre = models.CharField(max_length=100)
+    descripcion = models.TextField(blank=True, null=True)
     nivel_minimo = models.IntegerField(choices=NIVELES_IPS, default=1)
     
     def __str__(self):
@@ -169,6 +170,7 @@ class Usuario(AbstractUser):
         max_length=50,
         choices=[
             ("it", "IT"),
+            ("usuario", "Usuario"),
             ("medico", "Médico"),
             ("admin", "Administrador"),
             ("persona", "persona"),

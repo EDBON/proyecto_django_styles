@@ -18,7 +18,7 @@
                 <td>{{ cargo.nombre }}</td>
                 <td>{{ cargo.descripcion }}</td>
                 <td>
-                    <a href="{% url 'editar_cargo' cargo.id %}" class="btn btn-sm btn-warning">Editar</a>
+                    <a href="{% url 'actualizar_cargo' cargo.id %}" class="btn btn-sm btn-warning">Editar</a>
                     <a href="{% url 'eliminar_cargo' cargo.id %}" class="btn btn-sm btn-danger">Eliminar</a>
                 </td>
             </tr>

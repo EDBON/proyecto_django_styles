@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect, get_object_or_404
-
 from .models import *
 from .forms import *
 from django.contrib.auth import login
@@ -175,7 +174,7 @@ def eliminar_eps(request, eps_id):
 # crear_contrato
 def crear_contrato(request):
     if request.method == 'POST':
-        form = ContratoForm(request.POST)
+        form = ContratoForm(request.POST, request.FILES)  # No olvidar request.FILES
         if form.is_valid():
             form.save()
             return redirect('listar_contratos')  # Redirige a la lista de contratos después de crear
@@ -189,6 +188,7 @@ def crear_contrato(request):
 def listar_contratos(request):
     contratos = Contrato.objects.all()  # Obtenemos todos los registros de Contratos
     return render(request, 'contrato/listar_contratos.html', {'listar_contratos': contratos})
+
 
 
 # actualizar_contrato
@@ -282,6 +282,8 @@ def eliminar_empleado(request, empleado_id):
     return redirect('listar_empleados')
 
 # ///////nuevo
+
+# region crear documento empleado
 # crear_documento_empleado
 def crear_documento_empleado(request):
     if request.method == 'POST':
@@ -300,14 +302,15 @@ def listar_documentos_empleado(request):
 
 # eliminar_documento_empleado
 def eliminar_documento_empleado(request, documento_id):
-    documento = get_object_or_404(DocumentoEmpleadoForm, id=documento_id)
+    documento = get_object_or_404(DocumentosEmpleado, pk=documento_id)
     documento.delete()
     return redirect('listar_documentos_empleado')
 
+# region movimiento
 # crear_movimiento
 def crear_movimiento(request):
     if request.method == 'POST':
-        form = HistorialMovimientos(request.POST)
+        form = HistorialMovimientoForm(request.POST)  # <-- aquí usas el formulario, no el modelo
         if form.is_valid():
             form.save()
             return redirect('listar_movimientos')
@@ -315,11 +318,13 @@ def crear_movimiento(request):
         form = HistorialMovimientoForm()
     return render(request, 'historial_movimiento/crear_historial_movimiento.html', {'form': form})
 
+
 # listar_movimientos
 def listar_movimientos(request):
     movimientos = HistorialMovimientos.objects.all()
     return render(request, 'historial_movimiento/listar_movimientos.html', {'movimientos': movimientos})
 
+# region realacion jerarquica
 # crear_relacion_jerarquica
 def crear_relacion_jerarquica(request):
     if request.method == 'POST':
@@ -342,6 +347,21 @@ def eliminar_relacion_jerarquica(request, relacion_id):
     relacion.delete()
     return redirect('listar_relaciones_jerarquicas')
 
+def editar_relacion_jerarquica(request, pk):
+    relacion = get_object_or_404(RelacionesJerarquicas, pk=pk)
+
+    if request.method == 'POST':
+        form = RelacionJerarquicaForm(request.POST, instance=relacion)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_relaciones_jerarquicas')
+    else:
+        form = RelacionJerarquicaForm(instance=relacion)
+
+    return render(request, 'relacion_jerarquica/editar_relacion_jerarquica.html', {'form': form})
+
+
+# region cargos
 # crear_cargo
 def crear_cargo(request):
     if request.method == 'POST':

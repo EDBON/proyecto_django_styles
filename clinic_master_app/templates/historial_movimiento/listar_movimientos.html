@@ -1,33 +1,37 @@
 {% extends "base.html" %}
-
 {% block content %}
 <div class="container mt-4">
     <h2>Historial de Movimientos</h2>
-    <a href="{% url 'crear_movimiento' %}" class="btn btn-primary mb-3">Registrar Movimiento</a>
+    <a href="{% url 'crear_movimiento' %}" class="btn btn-primary mb-3">Crear Movimiento</a>
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Empleado</th>
-                <th>Tipo</th>
-                <th>Descripción</th>
-                <th>Fecha</th>
-                <th>Acciones</th>
+                <th>Área Anterior</th>
+                <th>Estado Anterior</th>
+                <th>Área Nueva</th>
+                <th>Estado Nuevo</th>
+                <th>Motivo</th>
+                <th>Fecha Movimiento</th>
+                <th>Registrado Por</th>
             </tr>
         </thead>
         <tbody>
-            {% for mov in movimientos %}
+            {% for movimiento in movimientos %}
             <tr>
-                <td>{{ mov.empleado }}</td>
-                <td>{{ mov.tipo_movimiento }}</td>
-                <td>{{ mov.descripcion }}</td>
-                <td>{{ mov.fecha_movimiento }}</td>
-                <td>
-                    <a href="{% url 'editar_historial_movimiento' mov.id %}" class="btn btn-sm btn-warning">Editar</a>
-                    <a href="{% url 'eliminar_historial_movimiento' mov.id %}" class="btn btn-sm btn-danger">Eliminar</a>
-                </td>
+                <td>{{ movimiento.empleado }}</td>
+                <td>{{ movimiento.area_anterior }}</td>
+                <td>{{ movimiento.estado_anterior }}</td>
+                <td>{{ movimiento.area_nueva }}</td>
+                <td>{{ movimiento.estado_nuevo }}</td>
+                <td>{{ movimiento.motivo }}</td>
+                <td>{{ movimiento.fecha_movimiento }}</td>
+                <td>{{ movimiento.registrado_por }}</td>
             </tr>
             {% empty %}
-            <tr><td colspan="5">No hay movimientos registrados.</td></tr>
+            <tr>
+                <td colspan="8">No hay movimientos registrados.</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>

@@ -67,6 +67,19 @@ class ContratoForm(forms.ModelForm):
         model = Contrato
         fields = '__all__'
 
+    # Definir los widgets para los campos de fecha
+    fecha_inicio = forms.DateField(
+        widget=forms.DateInput(
+            format='%Y-%m-%d',
+            attrs={'class': 'flatpickr', 'placeholder': 'YYYY-MM-DD'}
+        )
+    )
+    fecha_fin = forms.DateField(
+        widget=forms.DateInput(
+            format='%Y-%m-%d',
+            attrs={'class': 'flatpickr', 'placeholder': 'YYYY-MM-DD'}
+        )
+    )
 
 # region formacion form
 class FormacionForm(forms.ModelForm):
