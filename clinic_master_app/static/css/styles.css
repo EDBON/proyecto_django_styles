@@ -1,0 +1,133 @@
+/* Contenedor principal */
+.form-container {
+  max-width: 600px;
+  margin: 20px auto;
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(30, 136, 229, 0.2);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #212121;
+}
+
+/* Títulos */
+.form-container h2 {
+  color: #1E88E5;
+  font-weight: 700;
+  margin-bottom: 25px;
+  text-align: center;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+}
+
+/* Etiquetas de los inputs */
+.form-container label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #212121;
+}
+
+/* Campos de texto y selects */
+.form-container input[type="text"],
+.form-container input[type="email"],
+.form-container input[type="password"],
+.form-container select,
+.form-container textarea,
+.form-container input[type="date"],
+.form-container input[type="number"],
+.form-container input[type="file"] {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.8px solid #E0E0E0;
+  border-radius: 6px;
+  background-color: #BBDEFB;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  font-family: inherit;
+  color: #212121;
+}
+
+/* Focus en campos */
+.form-container input[type="text"]:focus,
+.form-container input[type="email"]:focus,
+.form-container input[type="password"]:focus,
+.form-container select:focus,
+.form-container textarea:focus,
+.form-container input[type="date"]:focus,
+.form-container input[type="number"]:focus,
+.form-container input[type="file"]:focus {
+  border-color: #1E88E5;
+  box-shadow: 0 0 8px rgba(30, 136, 229, 0.4);
+  outline: none;
+  background-color: #E3F2FD;
+}
+
+/* Botones primarios */
+.form-container button[type="submit"] {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #1E88E5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 15px;
+  letter-spacing: 0.8px;
+}
+
+.form-container button[type="submit"]:hover {
+  background-color: #1565C0;
+}
+
+/* Botones secundarios (enlaces) */
+.form-container a.button-link {
+  display: inline-block;
+  margin-top: 12px;
+  color: #1E88E5;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.form-container a.button-link:hover {
+  color: #1565C0;
+  text-decoration: underline;
+}
+
+/* Mensajes de error */
+.form-container .errorlist {
+  margin: 6px 0 12px 0;
+  padding: 5px 12px;
+  background: #ffebee;
+  border-left: 4px solid #e53935;
+  color: #b71c1c;
+  font-size: 0.9rem;
+  border-radius: 4px;
+}
+
+/* Select2 adjustments (ajustar al diseño) */
+.select2-container--default .select2-selection--single {
+  background-color: #BBDEFB;
+  border: 1.8px solid #E0E0E0;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  color: #212121;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--single {
+  border-color: #1E88E5;
+  box-shadow: 0 0 8px rgba(30, 136, 229, 0.4);
+}
+
+/* Responsividad */
+@media (max-width: 600px) {
+  .form-container {
+    padding: 15px 20px;
+  }
+}
