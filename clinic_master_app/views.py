@@ -67,14 +67,14 @@ def login_view(request):
             if user.puesto_empresa == "it":
                 return redirect("home")
             elif user.puesto_empresa == "medico":
-                return redirect("medico")
+                return redirect("persona")
             elif user.puesto_empresa == "persona":
                 return redirect("persona")
             elif user.puesto_empresa == "auxiliar":
-                return redirect("auxiliar")
+                return redirect("home")
             else:
-                return redirect("home")  # Redirección por defecto
-
+                return redirect("persona") # Redirección por defecto
+            
         else:
             return render(request, "auth/login.html", {"error": "Credenciales inválidas"})
 
@@ -214,35 +214,47 @@ def eliminar_contrato(request, contrato_id):
 # region Formacion
 
 # crear
+@login_required
 def crear_formacion(request):
+    persona = request.user.persona  # Paso 1
+    empleado = get_object_or_404(Empleado, id_persona=persona)  # Paso 2
+
     if request.method == 'POST':
         form = FormacionForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('listar_formaciones')  # Redirige a la lista de formaciones después de crear
+            formacion = form.save(commit=False)
+            formacion.id_empleado = empleado  # Paso 3: asociar
+            formacion.save()
+            return redirect('listar_formaciones')
     else:
         form = FormacionForm()
 
     return render(request, 'formacion/crear_formacion.html', {'form': form})
-
 # listar
+@login_required
 def listar_formaciones(request):
-    formaciones = Formacion.objects.all()  # Obtenemos todos los registros de Formaciones
+    persona = request.user.persona
+    empleado = get_object_or_404(Empleado, id_persona=persona)
+    formaciones = Formacion.objects.filter(id_empleado=empleado)
     return render(request, 'formacion/listar_formaciones.html', {'listar_formaciones': formaciones})
 
 # actuaizar
+@login_required
 def actualizar_formacion(request, formacion_id):
-    formacion = get_object_or_404(Formacion, id=formacion_id)
+    persona = request.user.persona
+    empleado = get_object_or_404(Empleado, id_persona=persona)
+    formacion = get_object_or_404(Formacion, id=formacion_id, id_empleado=empleado)
 
     if request.method == 'POST':
         form = FormacionForm(request.POST, instance=formacion)
         if form.is_valid():
             form.save()
-            return redirect('listar_formacion')  # Redirige a la lista de formaciones después de actualizar
+            return redirect('listar_formaciones')
     else:
         form = FormacionForm(instance=formacion)
 
     return render(request, 'formacion/actualizar_formacion.html', {'form': form})
+
 
 # eliminar formacion
 def eliminar_formacion(request, formacion_id):
@@ -285,21 +297,36 @@ def eliminar_empleado(request, empleado_id):
 
 # region crear documento empleado
 # crear_documento_empleado
+@login_required
 def crear_documento_empleado(request):
+    try:
+        persona = request.user.persona
+        empleado = Empleado.objects.get(id_persona=persona)
+    except (AttributeError, Empleado.DoesNotExist):
+        return render(request, 'error.html', {'mensaje': 'No tienes un perfil de empleado registrado.'})
+
     if request.method == 'POST':
         form = DocumentoEmpleadoForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            documento = form.save(commit=False)
+            documento.id_empleado = empleado  # Asociar al empleado logueado
+            documento.save()
             return redirect('listar_documentos_empleado')
     else:
-        form = DocumentoEmpleadoForm()
+        form = DocumentoEmpleadoForm()  # ✅ Nada de inicial ni hidden
+
     return render(request, 'documento_empleado/crear_documento_empleado.html', {'form': form})
-
 # listar_documentos_empleado
+@login_required
 def listar_documentos_empleado(request):
-    documentos = DocumentosEmpleado.objects.all()
-    return render(request, 'documento_empleado/listar_documentos_empleado.html', {'documentos': documentos})
+    try:
+        persona = request.user.persona
+        empleado = Empleado.objects.get(id_persona=persona)
+        documentos = DocumentosEmpleado.objects.filter(id_empleado=empleado)
+    except (AttributeError, Empleado.DoesNotExist):
+        documentos = []  # o podrías mostrar un error
 
+    return render(request, 'documento_empleado/listar_documentos_empleado.html', {'documentos': documentos})
 # eliminar_documento_empleado
 def eliminar_documento_empleado(request, documento_id):
     documento = get_object_or_404(DocumentosEmpleado, pk=documento_id)

@@ -86,14 +86,19 @@ class ContratoForm(forms.ModelForm):
 class FormacionForm(forms.ModelForm):
     class Meta:
         model = Formacion
-        fields = '__all__'
+        exclude = ['id_empleado']  # Ocultamos este campo porque lo asignamos desde la vista
         widgets = {
             'tipo_formacion': forms.TextInput(attrs={'class': 'form-control'}),
             'intitucion': forms.TextInput(attrs={'class': 'form-control'}),
-            'fecha_inicio': forms.DateInput(format='%Y-%m-%d', attrs={'class': 'flatpickr form-control'}),
-            'fecha_fin': forms.DateInput(format='%Y-%m-%d', attrs={'class': 'flatpickr form-control'}),
+            'fecha_inicio': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={'class': 'flatpickr form-control', 'type': 'date'}
+            ),
+            'fecha_fin': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={'class': 'flatpickr form-control', 'type': 'date'}
+            ),
             'titulo_obtenido': forms.TextInput(attrs={'class': 'form-control'}),
-            'id_empleado': forms.Select(attrs={'class': 'select2 form-select'}),
         }
 
 # region Empleado Form
@@ -113,13 +118,13 @@ class EmpleadoForm(forms.ModelForm):
 class DocumentoEmpleadoForm(forms.ModelForm):
     class Meta:
         model = DocumentosEmpleado
-        fields = '__all__'
+        exclude = ['id_empleado','subido_por']  # Se asigna desde la vista
         widgets = {
-            'id_empleado': forms.Select(attrs={'class': 'select2 form-select'}),
             'tipo_documento': forms.TextInput(attrs={'class': 'form-control'}),
             'nombre_documento': forms.TextInput(attrs={'class': 'form-control'}),
             'archivo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
+        
 
 # region HistorialMovimiento Form
 class HistorialMovimientoForm(forms.ModelForm):

@@ -34,7 +34,7 @@ def create_default_user(sender, **kwargs):
             email='diego@example.com',
             password='12345',
             persona=persona,
-            puesto_empresa="admin"
+            puesto_empresa="auxiliar"
         )
 
         print("✅ Usuario 'diego' creado correctamente con Persona y Empleado.")

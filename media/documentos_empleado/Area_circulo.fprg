@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="3.0">
+    <attributes>
+        <attribute name="name" value=""/>
+        <attribute name="authors" value="APRENDIZ"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2023-11-08 07:59:58 a. m."/>
+        <attribute name="created" value="QVBSRU5ESVo7U09BQVBSQ0lERlNEMTExOzIwMjMtMTAtMTk7MDY6NTQ6MzggYS4gbS47MzA5Ng=="/>
+        <attribute name="edited" value="QVBSRU5ESVo7U09BQVBSQ0lERlNEMTExOzIwMjMtMTEtMDg7MDc6NTk6NTggYS4gbS47MjszMjEy"/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="DIAMETRO, RADIO, TOTAL, TOTALL" type="Real" array="False" size=""/>
+            <declare name="rta" type="String" array="False" size=""/>
+            <assign variable="rta" expression="&quot;s&quot;"/>
+            <while expression="rta=&quot;s&quot;||rta=&quot;S&quot;">
+                <output expression="&quot;Escriba el diametro del circulo&quot;" newline="True"/>
+                <input variable="DIAMETRO"/>
+                <assign variable="RADIO" expression="DIAMETRO/2"/>
+                <assign variable="TOTAL" expression="RADIO^2"/>
+                <assign variable="TOTALL" expression="3.1416*TOTAL"/>
+                <output expression="&quot;El Area del circulo es &quot;&amp;TOTAL" newline="True"/>
+                <output expression="&quot;&#191;deseas continuar? s para si y n para no&quot;" newline="True"/>
+                <input variable="rta"/>
+            </while>
+            <output expression="&quot;gracias&quot;" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

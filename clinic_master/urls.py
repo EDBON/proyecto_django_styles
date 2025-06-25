@@ -38,8 +38,8 @@ urlpatterns = [
     
     # home
     path("home/", views.home, name="home"),
-    path("medico/", views.medico, name="medico"),
-    path("auxiliar/", views.auxiliar, name="auxiliar"),
+    path("medico/", views.medico, name="persona"),
+    path("auxiliar/", views.auxiliar, name="persona"),
     path("persona/", views.persona, name="persona"),
     
     # region Rutas para Eps
@@ -64,7 +64,7 @@ urlpatterns = [
 
     # region Rutas para Formacion
     path('crear_formacion/', views.crear_formacion, name='crear_formacion'),
-    path('listar_formacion/', views.listar_formaciones, name='listar_formaciones'),
+    path('listar_formaciones/', views.listar_formaciones, name='listar_formaciones'),
     path('actualizar_formacion/<int:formacion_id>/', views.actualizar_formacion, name='actualizar_formacion'),
     path('eliminar_formacion/<int:formacion_id>/', views.eliminar_formacion, name='eliminar_formacion'),
 
