@@ -26,7 +26,7 @@ urlpatterns = [
     path("", views.login_view, name="login"),
     
     # region usuario
-    path('crear_usuario/', views.crear_usuario, name='crear_usuario'),
+    # path('crear_usuario/', views.crear_usuario, name='crear_usuario'),
     path('listar_usuarios/', views.listar_usuarios, name='listar_usuarios'),
     path('actualizar_usuario/<int:usuario_id>/', views.actualizar_usuario, name='actualizar_usuario'),
     path('eliminar_usuario/<int:usuario_id>/', views.eliminar_usuario, name='eliminar_usuario'),
@@ -63,8 +63,8 @@ urlpatterns = [
     path('eliminar_contrato/<int:contrato_id>/', views.eliminar_contrato, name='eliminar_contrato'),
 
     # region Rutas para Formacion
-    path('crear_formacion/', views.crear_formacion, name='crear_formacion'),
-    path('listar_formaciones/', views.listar_formaciones, name='listar_formaciones'),
+    path('formacion/crear/<int:empleado_id>/', views.crear_formacion, name='crear_formacion'),
+    path('formacion/listar/<int:empleado_id>/', views.listar_formacion, name='listar_formacion'),
     path('actualizar_formacion/<int:formacion_id>/', views.actualizar_formacion, name='actualizar_formacion'),
     path('eliminar_formacion/<int:formacion_id>/', views.eliminar_formacion, name='eliminar_formacion'),
 
@@ -79,7 +79,6 @@ urlpatterns = [
     path('crear_documento_empleado/', views.crear_documento_empleado, name='crear_documento_empleado'),
     path('listar_documentos_empleado/', views.listar_documentos_empleado, name='listar_documentos_empleado'),
     path('eliminar_documento_empleado/<int:documento_id>/', views.eliminar_documento_empleado, name='eliminar_documento_empleado'),
-
     # region Rutas para HistorialMovimientos
     path('crear_movimiento/', views.crear_movimiento, name='crear_movimiento'),
     path('listar_movimientos/', views.listar_movimientos, name='listar_movimientos'),
@@ -96,6 +95,11 @@ urlpatterns = [
     path('actualizar_cargo/<int:cargo_id>/', views.actualizar_cargo, name='actualizar_cargo'),
     path('eliminar_cargo/<int:cargo_id>/', views.eliminar_cargo, name='eliminar_cargo'),
 
+    # ////////////////////////////////////
+    path('crear-usuario/', views.seleccionar_o_crear_eps, name='crear_usuario'),
+    path('crear-persona/<int:eps_id>/', views.crear_persona, name='crear_persona'),
+    path('crear-empleado/<int:persona_id>/', views.crear_empleado, name='crear_empleado'),
+    path('crear-usuario-final/<int:persona_id>/', views.crear_usuario_final, name='crear_usuario_final'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

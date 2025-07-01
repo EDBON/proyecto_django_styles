@@ -164,8 +164,8 @@ class Empleado(models.Model):
 #region Usuario
 
 class Usuario(AbstractUser):
-    persona = models.OneToOneField('Persona', on_delete=models.SET_NULL, null=True, blank=True)  # <- esta línea nueva
-
+    persona = models.OneToOneField('Persona', on_delete=models.SET_NULL, null=True, blank=False)  # <- esta línea nueva
+    empleado = models.OneToOneField('Empleado', on_delete=models.CASCADE, null=False, blank=False)
     puesto_empresa = models.CharField(
         max_length=50,
         choices=[
@@ -184,37 +184,86 @@ class Usuario(AbstractUser):
     
 #region Formacion
 class Formacion(models.Model):
-    tipo_formacion = models.CharField(max_length=100)
-    intitucion = models.CharField(max_length=100)
-    fecha_inicio = models.DateField(max_length=100)
-    fecha_fin = models.DateField(max_length=100)
-    titulo_obtenido = models.CharField(max_length=100)
-    id_empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE, null=True)
+    TIPO_FORMACION_CHOICES = [
+        ('pregrado', 'Pregrado'),
+        ('posgrado', 'Posgrado'),
+        ('diplomado', 'Diplomado'),
+        ('curso', 'Curso'),
+        ('tecnico', 'Técnico'),
+        ('otro', 'Otro'),
+    ]
     
+    ESTADO_FORMACION_CHOICES = [
+        ('completa', 'Completa'),
+        ('en_curso', 'En curso'),
+        ('incompleta', 'Incompleta'),
+    ]
+
+    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE, null=False)
+    tipo_formacion = models.CharField(max_length=20, choices=TIPO_FORMACION_CHOICES)
+    institucion = models.CharField(max_length=150)
+    fecha_inicio = models.DateField()
+    fecha_fin = models.DateField(blank=True, null=True)
+    titulo_obtenido = models.CharField(max_length=150)
+    estado = models.CharField(max_length=20, choices=ESTADO_FORMACION_CHOICES, default='completa')
+    certificado = models.FileField(upload_to='formacion/certificados/', blank=True, null=True)
+    observaciones = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.titulo_obtenido} - {self.empleado.id_persona.nombre} {self.empleado.id_persona.apellido}"
     
 #region Contrato
 class Contrato(models.Model):
-    id_empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE,null=True)
-    salario = models.DecimalField(max_digits=10, decimal_places=2)  # Mejor usar DecimalField para valores monetarios
-    tipo_contrato = models.CharField(max_length=100, choices=PUESTOS_CONTRATO)
+    TIPO_CONTRATO_CHOICES = [
+        ('temporal', 'Temporal'),
+        ('indefinido', 'Indefinido'),
+        ('practicas', 'Prácticas'),
+    ]
+    
+    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE, null=True)  # Relación con el Empleado
+    salario = models.DecimalField(max_digits=10, decimal_places=2)  # Salario
+    tipo_contrato = models.CharField(max_length=100, choices=TIPO_CONTRATO_CHOICES)
     fecha_inicio = models.DateField(blank=True, null=True)
     fecha_fin = models.DateField(blank=True, null=True)
-    documento_contrato = models.FileField(upload_to=user_directory_path_1, blank=True, null=True, verbose_name='Contrato')
+    documento_contrato = models.FileField(upload_to='contratos/', blank=True, null=True, verbose_name='Contrato')
+
     @property
     def archivo_nombre(self):
-        return os.path.basename(self.documento_contrato.name).replace("None_", "")
-    
+        if self.documento_contrato:
+            return os.path.basename(self.documento_contrato.name).replace("None_", "")
+        return "Sin archivo"
+
+    def clean_salario(self):
+        if self.salario <= 0:
+            raise ValidationError("El salario debe ser un valor positivo.")
+        return self.salario
+
+    def clean_fecha_fin(self):
+        if self.fecha_fin and self.fecha_fin < self.fecha_inicio:
+            raise ValidationError("La fecha de finalización no puede ser anterior a la de inicio.")
+        return self.fecha_fin
+
+    def __str__(self):
+        return f"Contrato {self.empleado} - {self.tipo_contrato}"
+
+
 # region documetnos_empleado
 class DocumentosEmpleado(models.Model):
-    id_empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
-    tipo_documento = models.CharField(max_length=100)
-    nombre_documento = models.CharField(max_length=100)
+    TIPO_DOCUMENTO_CHOICES = [
+        ('hoja_vida', 'Hoja de Vida'),
+        ('cedula', 'Cédula'),
+        ('certificado_estudios', 'Certificado de Estudios'),
+    ]
+
+    empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+    tipo_documento = models.CharField(max_length=50, choices=TIPO_DOCUMENTO_CHOICES)
     archivo = models.FileField(upload_to='documentos_empleado/')
     fecha_subida = models.DateField(auto_now_add=True)
     subido_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True)
+    descripcion = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.nombre_documento} - {self.id_empleado}"
+        return f"{self.nombre_documento} - {self.empleado}"
     
 class HistorialMovimientos(models.Model):
     empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)

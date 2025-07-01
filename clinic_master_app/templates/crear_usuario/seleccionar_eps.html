@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Seleccionar o Crear EPS{% endblock %}
+
+{% block content %}
+{% load static %}
+
+<!-- Estilos generales -->
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+<!-- Estilo de Select2 -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+</script>
+
+<div class="container">
+    <h2>Seleccionar EPS existente</h2>
+
+    <!-- Formulario de Selección de EPS -->
+    <form method="POST" class="mb-5">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="eps_id">Seleccionar EPS:</label>
+            <select name="eps_id" id="eps_id" class="form-select select2">
+                {% for eps in eps_list %}
+                    <option value="{{ eps.id }}">{{ eps.nombre_eps }}</option>
+                {% empty %}
+                    <option>No hay EPS disponibles</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Continuar</button>
+    </form>
+
+    <hr>
+
+    <h3>O Crear una nueva EPS</h3>
+
+    <!-- Formulario para Crear EPS -->
+    <form method="POST">
+        {% csrf_token %}
+        
+        <!-- Campo de Nombre EPS -->
+        <div class="form-group">
+            <label for="nombre_eps">Nombre EPS:</label>
+            {{ form.nombre_eps }}  <!-- Renderizando el campo del formulario -->
+        </div>
+
+        <!-- Campo de Dirección EPS -->
+        <div class="form-group">
+            <label for="direccion_eps">Dirección:</label>
+            {{ form.direccion_eps }}  <!-- Renderizando el campo del formulario -->
+        </div>
+
+        <!-- Campo de Teléfono EPS -->
+        <div class="form-group">
+            <label for="telefono_eps">Teléfono:</label>
+            {{ form.telefono_eps }}  <!-- Renderizando el campo del formulario -->
+        </div>
+
+        <!-- Campo de Email EPS -->
+        <div class="form-group">
+            <label for="email_eps">Email:</label>
+            {{ form.email_eps }}  <!-- Renderizando el campo del formulario -->
+        </div>
+
+        <button type="submit" name="crear_eps" class="btn btn-success">Crear EPS</button>
+    </form>
+</div>
+{% endblock %}

@@ -24,13 +24,6 @@
         <a href="#politicas">Políticas</a>
         <a href="#contacto">Contacto</a>
       </div>
-      <!-- Botón Cerrar sesión en el Header -->
-      <div class="logout-container">
-        <form action="{% url 'logout' %}" method="post" class="logout-form">
-          {% csrf_token %}
-          <button type="submit" class="logout-btn">Cerrar sesión</button>
-        </form>
-      </div>
     </nav>
   </header>
 

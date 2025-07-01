@@ -9,7 +9,8 @@
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Guardar</button>
-        <a href="{% url 'listar_formaciones' %}" class="btn btn-secondary">Cancelar</a>
+        <a href="{% url 'listar_formacion' empleado_id=empleado.id %}">Volver a la lista</a>
+
     </form>
 </div>
 <!-- Flatpickr CSS -->

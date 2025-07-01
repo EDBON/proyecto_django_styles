@@ -1,6 +1,8 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/listar.css' %}">
 <div class="container mt-4">
     <h2>Documentos de Empleados</h2>
     <a href="{% url 'crear_documento_empleado' %}" class="btn btn-primary mb-3">Crear Documento</a>
@@ -8,16 +10,17 @@
         <thead>
             <tr>
                 <th>Empleado</th>
-                <th>Nombre Documento</th>
+                <th>Tipo Documento</th>
                 <th>Archivo</th>
                 <th>Fecha de Subida</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             {% for doc in documentos %}
             <tr>
-                <td>{{ doc.id_empleado }}</td>
-                <td>{{ doc.nombre_documento }}</td>
+                <td>{{ doc.empleado }}</td>
+                <td>{{ doc.get_tipo_documento_display }}</td> <!-- Mostrar tipo de documento como texto -->
                 <td>
                     {% if doc.archivo %}
                         <a href="{{ doc.archivo.url }}" target="_blank">Ver</a>
@@ -26,10 +29,14 @@
                     {% endif %}
                 </td>
                 <td>{{ doc.fecha_subida }}</td>
+                <td>
+                    <!-- Botón de eliminar -->
+                    <a href="{% url 'eliminar_documento_empleado' doc.id %}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este documento?')">Eliminar</a>
+                </td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="4">No hay documentos registrados.</td>
+                <td colspan="5">No hay documentos registrados.</td>
             </tr>
             {% endfor %}
         </tbody>

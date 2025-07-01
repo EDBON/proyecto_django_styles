@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Lista de Formaciones{% endblock %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/listar.css' %}">
 <div class="container">
     <h2>Lista de Formaciones</h2>
-    <a href="{% url 'crear_formacion' %}" class="btn btn-success mb-3">Añadir Formación</a>
+    <a href="{% url 'crear_formacion' empleado_id=empleado.id %}" class="btn btn-success mb-3">Añadir Formación</a>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -18,10 +20,10 @@
             </tr>
         </thead>
         <tbody>
-            {% for formacion in listar_formaciones %}
+            {% for formacion in formaciones %}
             <tr>
                 <td>{{ formacion.tipo_formacion }}</td>
-                <td>{{ formacion.intitucion }}</td>
+                <td>{{ formacion.institucion }}</td>
                 <td>{{ formacion.fecha_inicio }}</td>
                 <td>{{ formacion.fecha_fin }}</td>
                 <td>{{ formacion.titulo_obtenido }}</td>

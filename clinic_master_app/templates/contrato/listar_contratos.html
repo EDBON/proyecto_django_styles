@@ -9,30 +9,40 @@
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>Empleado</th>
                 <th>Salario</th>
                 <th>Tipo de Contrato</th>
-                <th>Archivos</th>
+                <th>Fecha de Inicio</th>
+                <th>Fecha de Fin</th>
+                <th>Contrato (Archivo)</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             {% for contrato in listar_contratos %}
             <tr>
+                <td>{{ contrato.empleado }} <!-- Muestra el empleado asignado al contrato --></td>
                 <td>{{ contrato.salario }}</td>
                 <td>{{ contrato.tipo_contrato }}</td>
+                <td>{{ contrato.fecha_inicio }}</td>
+                <td>{{ contrato.fecha_fin }}</td>
                 <td>
                     {% if contrato.documento_contrato %}
-                    <a href="{{ contrato.documento_contrato.url }}" target="_blank">
-                        {{ contrato.archivo_nombre }}
-                    </a>
+                        <a href="{{ contrato.documento_contrato.url }}" target="_blank">
+                            Ver Contrato
+                        </a>
                     {% else %}
-                    No hay archivo
+                        No hay archivo
                     {% endif %}
                 </td>
                 <td>
                     <a href="{% url 'actualizar_contrato' contrato.id %}" class="btn btn-warning btn-sm">Editar</a>
                     <a href="{% url 'eliminar_contrato' contrato.id %}" class="btn btn-danger btn-sm">Eliminar</a>
                 </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">No hay contratos registrados.</td>
             </tr>
             {% endfor %}
         </tbody>

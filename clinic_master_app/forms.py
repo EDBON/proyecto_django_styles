@@ -15,10 +15,8 @@ class LoginForm(AuthenticationForm):
 class UsuarioForm(UserCreationForm):
     class Meta:
         model = Usuario
-        fields = ["persona", "username", "puesto_empresa", "password1", "password2"]
+        fields = ["puesto_empresa", "password1", "password2"]  # Quitamos username y persona
         widgets = {
-            'persona': forms.Select(attrs={'class': 'select2 form-select'}),
-            'username': forms.TextInput(attrs={'class': 'form-control'}),
             'puesto_empresa': forms.Select(attrs={'class': 'form-select'}),
             'password1': forms.PasswordInput(attrs={'class': 'form-control'}),
             'password2': forms.PasswordInput(attrs={'class': 'form-control'}),
@@ -35,7 +33,6 @@ class UsuarioUpdateForm(UserChangeForm):
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'puesto_empresa': forms.Select(attrs={'class': 'form-select'}),
         }
-
 # region EPS Form
 class EpsForm(forms.ModelForm):
     class Meta:
@@ -52,7 +49,7 @@ class EpsForm(forms.ModelForm):
 class PersonaForm(forms.ModelForm):
     class Meta:
         model = Persona
-        fields = '__all__'
+        exclude = ['eps']  # <- evita que se muestre en el formulario
         widgets = {
             'tipo_doc': forms.Select(attrs={'class': 'form-select'}),
             'num_doc': forms.TextInput(attrs={'class': 'form-control'}),
@@ -63,18 +60,18 @@ class PersonaForm(forms.ModelForm):
             'direccion': forms.TextInput(attrs={'class': 'form-control'}),
             'telefono': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'eps': forms.Select(attrs={'class': 'select2 form-select'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'imagen': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
+
 
 # region Contrato Form
 class ContratoForm(forms.ModelForm):
     class Meta:
         model = Contrato
-        fields = '__all__'
+        fields = '__all__'  # Incluye todos los campos del modelo
         widgets = {
-            'id_empleado': forms.Select(attrs={'class': 'select2 form-select'}),
+            'empleado': forms.Select(attrs={'class': 'select2 form-select'}),
             'salario': forms.NumberInput(attrs={'class': 'form-control'}),
             'tipo_contrato': forms.Select(attrs={'class': 'form-select'}),
             'fecha_inicio': forms.DateInput(format='%Y-%m-%d', attrs={'class': 'flatpickr form-control'}),
@@ -82,32 +79,43 @@ class ContratoForm(forms.ModelForm):
             'documento_contrato': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 
+    def clean_salario(self):
+        salario = self.cleaned_data['salario']
+        if salario <= 0:
+            raise forms.ValidationError("El salario debe ser un valor positivo.")
+        return salario
+
+    def clean_fecha_fin(self):
+        fecha_inicio = self.cleaned_data.get('fecha_inicio')
+        fecha_fin = self.cleaned_data.get('fecha_fin')
+        if fecha_fin and fecha_fin < fecha_inicio:
+            raise forms.ValidationError("La fecha de finalización no puede ser anterior a la de inicio.")
+        return fecha_fin
+
+
 # region Formacion Form
+
 class FormacionForm(forms.ModelForm):
     class Meta:
         model = Formacion
-        exclude = ['id_empleado']  # Ocultamos este campo porque lo asignamos desde la vista
+        exclude = ['empleado']
         widgets = {
-            'tipo_formacion': forms.TextInput(attrs={'class': 'form-control'}),
-            'intitucion': forms.TextInput(attrs={'class': 'form-control'}),
-            'fecha_inicio': forms.DateInput(
-                format='%Y-%m-%d',
-                attrs={'class': 'flatpickr form-control', 'type': 'date'}
-            ),
-            'fecha_fin': forms.DateInput(
-                format='%Y-%m-%d',
-                attrs={'class': 'flatpickr form-control', 'type': 'date'}
-            ),
+            'tipo_formacion': forms.Select(attrs={'class': 'form-select'}),
+            'institucion': forms.TextInput(attrs={'class': 'form-control'}),
+            'fecha_inicio': forms.DateInput(attrs={'class': 'flatpickr form-control'}),
+            'fecha_fin': forms.DateInput(attrs={'class': 'flatpickr form-control'}),
             'titulo_obtenido': forms.TextInput(attrs={'class': 'form-control'}),
+            'estado': forms.Select(attrs={'class': 'form-select'}),
+            'certificado': forms.FileInput(attrs={'class': 'form-control'}),
+            'observaciones': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
 
 # region Empleado Form
 class EmpleadoForm(forms.ModelForm):
     class Meta:
         model = Empleado
-        fields = '__all__'
+        exclude = ['id_persona']  # ya lo pasamos desde la vista
         widgets = {
-            'id_persona': forms.Select(attrs={'class': 'select2 form-select'}),
             'area_trabajo': forms.Select(attrs={'class': 'form-select'}),
             'estado': forms.Select(attrs={'class': 'form-select'}),
             'puesto_empresa': forms.Select(attrs={'class': 'form-select'}),
@@ -115,16 +123,18 @@ class EmpleadoForm(forms.ModelForm):
         }
 
 # region DocumentosEmpleado Form
+
 class DocumentoEmpleadoForm(forms.ModelForm):
     class Meta:
         model = DocumentosEmpleado
-        exclude = ['id_empleado','subido_por']  # Se asigna desde la vista
+        exclude = ['empleado', 'subido_por']  # Se asignan en la vista
         widgets = {
-            'tipo_documento': forms.TextInput(attrs={'class': 'form-control'}),
-            'nombre_documento': forms.TextInput(attrs={'class': 'form-control'}),
+            'tipo_documento': forms.Select(attrs={'class': 'form-control'}),
+            'nombre_documento': forms.TextInput(attrs={'class': 'form-control'}),  # Asegúrate de incluir este campo
             'archivo': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
-        
+
 
 # region HistorialMovimiento Form
 class HistorialMovimientoForm(forms.ModelForm):

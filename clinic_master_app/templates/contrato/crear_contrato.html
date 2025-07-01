@@ -11,7 +11,7 @@
 
 <div class="container">
     <h2>Crear Contrato</h2>
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data"> <!-- Asegúrate de agregar enctype -->
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Guardar</button>

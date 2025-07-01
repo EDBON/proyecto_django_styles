@@ -1,18 +1,41 @@
-{% extends 'base.html' %}
-
-{% block content %}
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Talento Humano IPS</title>
+  <title>IPS Talento Humano</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <!-- Enlazamos el archivo CSS externo -->
+  <link rel="stylesheet" href="{% static 'css/styless.css' %}">
 </head>
-
 <body>
 
+  <!-- Header -->
+  <header>
+    <nav>
+      <div class="logo">IPS Talento Humano</div>
+      <div class="nav-links">
+        <a href="#inicio">Inicio</a>
+        <a href="#vacantes">Vacantes</a>
+        <a href="#politicas">Políticas</a>
+        <a href="#contacto">Contacto</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Barra lateral -->
+  <div class="sidebar" id="sidebar">
+    <div class="logo">IPS Talento Humano</div>
+    <a href="#inicio"><i class="fas fa-home"></i> Inicio</a>
+    <a href="#vacantes"><i class="fas fa-briefcase"></i> Vacantes</a>
+    <a href="#politicas"><i class="fas fa-file-alt"></i> Políticas</a>
+    <a href="#contacto"><i class="fas fa-phone"></i> Contacto</a>
+  </div>
+
+  <!-- Botón para ocultar/mostrar barra lateral -->
+  <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+
+  <!-- Contenido principal -->
   <div class="main-content" id="main-content">
     <!-- Contenedor de Talento Humano -->
     <div class="content-container">
@@ -53,8 +76,25 @@
     </div>
   </div>
 
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <p>© 2025 IPS Talento Humano. Todos los derechos reservados.</p>
+      <div class="footer-links">
+        <a href="#politicas">Política de Privacidad</a>
+        <a href="#terminos">Términos y Condiciones</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleSidebar() {
+      var sidebar = document.getElementById('sidebar');
+      var content = document.getElementById('main-content');
+      sidebar.classList.toggle('open');
+      content.classList.toggle('closed');
+    }
+  </script>
+
 </body>
-
 </html>
-
-{% endblock %}

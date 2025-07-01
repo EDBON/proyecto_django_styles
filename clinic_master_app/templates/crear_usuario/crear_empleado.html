@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crear Empleado</title>
+</head>
+<body>
+    <h2>Crear Empleado para: {{ persona.nombre }} {{ persona.apellido }}</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Guardar Empleado</button>
+    </form>
+</body>
+</html>

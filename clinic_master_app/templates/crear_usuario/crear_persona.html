@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crear Persona</title>
+</head>
+<body>
+    <h2>Crear Persona para EPS: {{ eps.nombre_eps }}</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Guardar Persona</button>
+    </form>
+</body>
+</html>

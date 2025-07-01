@@ -11,8 +11,10 @@ def medico(request):
     return render(request, 'medico.html') 
 def auxiliar(request):
     return render(request, 'auxiliar.html') 
+@login_required
 def persona(request):
-    return render(request, 'persona.html') 
+    empleado = request.user.empleado  # accede al empleado desde el usuario logueado
+    return render(request, 'persona.html', {'empleado': empleado})
 
 login_required
 
@@ -65,7 +67,7 @@ def login_view(request):
 
             # Redirección según puesto_empresa
             if user.puesto_empresa == "it":
-                return redirect("home")
+                return redirect("persona")
             elif user.puesto_empresa == "medico":
                 return redirect("persona")
             elif user.puesto_empresa == "persona":
@@ -80,16 +82,25 @@ def login_view(request):
 
     return render(request, "auth/login.html")
 
+# region persona
 # crear persona
-def crear_persona(request):
-    if request.method =='POST':
-        form = PersonaForm(request.POST)
+def crear_persona(request, eps_id):
+    eps = get_object_or_404(Eps, id=eps_id)
+    if request.method == 'POST':
+        form = PersonaForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('listar_personas')
+            persona = form.save(commit=False)
+            persona.eps = eps
+            persona.save()
+            return redirect('crear_empleado', persona_id=persona.id)
     else:
         form = PersonaForm()
-    return render(request, 'persona/crear_persona.html', {'form':form})
+    return render(request, 'persona/crear_persona.html', {
+        'form': form,
+        'eps': eps
+    })
+
+
 
 # listar persona
 def listar_personas(request):
@@ -177,16 +188,15 @@ def crear_contrato(request):
         form = ContratoForm(request.POST, request.FILES)  # No olvidar request.FILES
         if form.is_valid():
             form.save()
-            return redirect('listar_contratos')  # Redirige a la lista de contratos después de crear
+            return redirect('listar_contratos')
     else:
         form = ContratoForm()
 
     return render(request, 'contrato/crear_contrato.html', {'form': form})
 
-
 # listar_contrato
 def listar_contratos(request):
-    contratos = Contrato.objects.all()  # Obtenemos todos los registros de Contratos
+    contratos = Contrato.objects.all()  # Obtenemos todos los registros de contratos
     return render(request, 'contrato/listar_contratos.html', {'listar_contratos': contratos})
 
 
@@ -205,6 +215,7 @@ def actualizar_contrato(request, contrato_id):
 
     return render(request, 'contrato/actualizar_contrato.html', {'form': form})
 
+
 # eliminar contrata
 def eliminar_contrato(request, contrato_id):
     contrato = get_object_or_404(Contrato, id=contrato_id)
@@ -215,46 +226,47 @@ def eliminar_contrato(request, contrato_id):
 
 # crear
 @login_required
-def crear_formacion(request):
-    persona = request.user.persona  # Paso 1
-    empleado = get_object_or_404(Empleado, id_persona=persona)  # Paso 2
+def crear_formacion(request, empleado_id):
+    empleado = get_object_or_404(Empleado, id=empleado_id)
 
     if request.method == 'POST':
-        form = FormacionForm(request.POST)
+        form = FormacionForm(request.POST, request.FILES)
         if form.is_valid():
             formacion = form.save(commit=False)
-            formacion.id_empleado = empleado  # Paso 3: asociar
+            formacion.empleado = empleado
             formacion.save()
-            return redirect('listar_formaciones')
+            return redirect('listar_formacion', empleado_id=empleado.id)
     else:
         form = FormacionForm()
 
-    return render(request, 'formacion/crear_formacion.html', {'form': form})
+    return render(request, 'formacion/crear_formacion.html', {'form': form, 'empleado': empleado})
 # listar
-@login_required
-def listar_formaciones(request):
-    persona = request.user.persona
-    empleado = get_object_or_404(Empleado, id_persona=persona)
-    formaciones = Formacion.objects.filter(id_empleado=empleado)
-    return render(request, 'formacion/listar_formaciones.html', {'listar_formaciones': formaciones})
+
+def listar_formacion(request, empleado_id):
+    empleado = get_object_or_404(Empleado, id=empleado_id)
+    formaciones = Formacion.objects.filter(empleado=empleado)
+    return render(request, 'formacion/listar_formacion.html', {
+        'formaciones': formaciones,
+        'empleado': empleado,
+    })
+
 
 # actuaizar
 @login_required
 def actualizar_formacion(request, formacion_id):
     persona = request.user.persona
     empleado = get_object_or_404(Empleado, id_persona=persona)
-    formacion = get_object_or_404(Formacion, id=formacion_id, id_empleado=empleado)
+    formacion = get_object_or_404(Formacion, id=formacion_id, empleado=empleado)
 
     if request.method == 'POST':
         form = FormacionForm(request.POST, instance=formacion)
         if form.is_valid():
             form.save()
-            return redirect('listar_formaciones')
+            return redirect('listar_formacion', empleado_id=empleado.id)
     else:
         form = FormacionForm(instance=formacion)
 
-    return render(request, 'formacion/actualizar_formacion.html', {'form': form})
-
+    return render(request, 'formacion/actualizar_formacion.html', {'form': form, 'empleado': empleado})
 
 # eliminar formacion
 def eliminar_formacion(request, formacion_id):
@@ -263,15 +275,23 @@ def eliminar_formacion(request, formacion_id):
     return redirect('listar_formaciones')
 #region empleado
 
-def crear_empleado(request):
+def crear_empleado(request, persona_id):
+    persona = get_object_or_404(Persona, id=persona_id)
     if request.method == 'POST':
         form = EmpleadoForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('listar_empleados')
+            empleado = form.save(commit=False)
+            empleado.id_persona = persona
+            empleado.save()
+            return redirect('crear_usuario_final', persona_id=persona.id)
     else:
         form = EmpleadoForm()
-    return render(request, 'empleado/crear_empleado.html', {'form': form})
+    return render(request, 'empleado/crear_empleado.html', {
+        'form': form,
+        'persona': persona
+    })
+
+
 
 def listar_empleados(request):
     empleados = Empleado.objects.all()
@@ -309,27 +329,38 @@ def crear_documento_empleado(request):
         form = DocumentoEmpleadoForm(request.POST, request.FILES)
         if form.is_valid():
             documento = form.save(commit=False)
-            documento.id_empleado = empleado  # Asociar al empleado logueado
+            documento.empleado = empleado  # ← CAMBIO AQUÍ
+            documento.subido_por = request.user  # ← Opcional pero útil
             documento.save()
             return redirect('listar_documentos_empleado')
     else:
-        form = DocumentoEmpleadoForm()  # ✅ Nada de inicial ni hidden
+        form = DocumentoEmpleadoForm()
 
     return render(request, 'documento_empleado/crear_documento_empleado.html', {'form': form})
+
 # listar_documentos_empleado
 @login_required
 def listar_documentos_empleado(request):
     try:
         persona = request.user.persona
         empleado = Empleado.objects.get(id_persona=persona)
-        documentos = DocumentosEmpleado.objects.filter(id_empleado=empleado)
+        documentos = DocumentosEmpleado.objects.filter(empleado=empleado)  # ← CAMBIO AQUÍ
     except (AttributeError, Empleado.DoesNotExist):
-        documentos = []  # o podrías mostrar un error
+        documentos = []
+
+    return render(request, 'documento_empleado/listar_documentos_empleado.html', {'documentos': documentos})
+
 
     return render(request, 'documento_empleado/listar_documentos_empleado.html', {'documentos': documentos})
 # eliminar_documento_empleado
+@login_required
 def eliminar_documento_empleado(request, documento_id):
     documento = get_object_or_404(DocumentosEmpleado, pk=documento_id)
+
+    # Validar que el usuario sea quien subió o el dueño (opcional):
+    if documento.empleado.id_persona != request.user.persona:
+        return render(request, 'error.html', {'mensaje': 'No tienes permiso para eliminar este documento.'})
+
     documento.delete()
     return redirect('listar_documentos_empleado')
 
@@ -422,3 +453,59 @@ def eliminar_cargo(request, cargo_id):
     cargo = get_object_or_404(Cargo, id=cargo_id)
     cargo.delete()
     return redirect('listar_cargos')
+
+# //////////////////////////////////////////////////////
+
+
+def seleccionar_o_crear_eps(request):
+    if request.method == 'POST':
+        if 'crear_eps' in request.POST:
+            form = EpsForm(request.POST)
+            if form.is_valid():
+                eps = form.save()
+                return redirect('crear_persona', eps_id=eps.id)
+        else:
+            eps_id = request.POST.get('eps_id')
+            return redirect('crear_persona', eps_id=eps_id)
+
+    form = EpsForm()
+    eps_list = Eps.objects.all()
+    return render(request, 'crear_usuario/seleccionar_eps.html', {
+        'form': form,
+        'eps_list': eps_list
+    })
+
+
+def crear_usuario_final(request, persona_id):
+    persona = get_object_or_404(Persona, id=persona_id)
+    
+    # Intentar obtener empleado relacionado a la persona (suponiendo que existe 1:1)
+    try:
+        empleado = Empleado.objects.get(id_persona=persona)
+    except Empleado.DoesNotExist:
+        empleado = None  # O manejar este caso, no dejar sin empleado si es obligatorio
+
+    if request.method == 'POST':
+        form = UsuarioForm(request.POST)
+        if form.is_valid():
+            usuario = form.save(commit=False)
+            usuario.username = persona.num_doc
+            usuario.persona = persona
+            usuario.empleado = empleado  # Asignar el empleado aquí
+            
+            usuario.set_password(form.cleaned_data['password1'])
+            
+            # Si empleado es obligatorio, validar que no sea None
+            if usuario.empleado is None:
+                form.add_error(None, "No se encontró un empleado asociado a esta persona.")
+                return render(request, 'crear_usuario/crear_usuario.html', {'form': form, 'persona': persona})
+            
+            usuario.save()
+            return redirect('home')
+    else:
+        form = UsuarioForm()
+    return render(request, 'crear_usuario/crear_usuario.html', {
+        'form': form,
+        'persona': persona
+    })
+

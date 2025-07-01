@@ -28,12 +28,13 @@ def create_default_user(sender, **kwargs):
             especialidades="Ninguna"        # O una opción válida en ESPECIALIDADES
         )
 
-        # Crear Usuario vinculado a Persona (NO al Empleado)
+        # Crear Usuario vinculado a Persona Y Empleado (¡IMPORTANTE PASAR empleado!)
         user = Usuario.objects.create_superuser(
             username='diego',
             email='diego@example.com',
             password='12345',
             persona=persona,
+            empleado=empleado,            # <-- Esto faltaba
             puesto_empresa="auxiliar"
         )
 

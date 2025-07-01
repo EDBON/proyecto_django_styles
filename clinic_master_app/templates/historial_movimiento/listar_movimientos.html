@@ -1,5 +1,9 @@
 {% extends "base.html" %}
+
+{% load static %}
+
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/listar.css' %}">
 <div class="container mt-4">
     <h2>Historial de Movimientos</h2>
     <a href="{% url 'crear_movimiento' %}" class="btn btn-primary mb-3">Crear Movimiento</a>
