@@ -80,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'clinic_master',
         'USER': 'root',
-        'PASSWORD': '1',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '3306'
     }
@@ -144,3 +144,19 @@ USE_TZ = True
 
 TIME_ZONE = 'America/Bogota'
 LOGIN_URL = '/login/'
+
+# settings.py
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'edfaborivera@gmail.com'
+EMAIL_HOST_PASSWORD = 'qmyi ygdi joww omfw'  # No uses tu contraseña normal, sino la de aplicación
+
+# Opcional: para que los enlaces generados en los correos tengan tu dominio correcto
+DEFAULT_FROM_EMAIL = 'edfaborivera@gmail.com'
+
+# Para desarrollo local
+DOMAIN = '127.0.0.1:8000'
+PROTOCOL = 'http'

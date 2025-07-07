@@ -3,33 +3,21 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Título de la página que puede ser sobrescrito por las plantillas hijas -->
-  <title>{% block title %}IPS Talento Humano{% endblock %}</title>
-     <link rel="shortcut icon" href="{% static 'images/logo-clinic_master.png' %}">
-  <!-- Fuentes y estilos -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <meta charset="UTF-8">
+    <title>Sobre Nosotros - ClinicMaster</title>
+    <link rel="stylesheet" href="{% static 'css/sobre_nosotros.css' %}">
 </head>
 <body>
 
-  <!-- Header -->
+<!-- Header -->
   <header>
     <nav>
       <div class="logo">IPS Talento Humano</div>
       <div class="nav-links">
-        <a href="#inicio">Inicio</a>
+        <a href="{% url 'home' %}">Inicio</a>
         <a href="#vacantes">Vacantes</a>
         <a href="#politicas">Políticas</a>
         <a href="#contacto">Contacto</a>
-      </div>
-      <!-- Botón Cerrar sesión en el Header -->
-      <div class="logout-container">
-        <form action="{% url 'logout' %}" method="post" class="logout-form">
-          {% csrf_token %}
-          <button type="submit" class="logout-btn">Cerrar sesión</button>
-        </form>
       </div>
     </nav>
   </header>
@@ -52,15 +40,46 @@
 
   <!-- Botón para ocultar/mostrar barra lateral -->
   <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+    <h1 class="page-title">Sobre Nosotros</h1>
+<main class="sobre-nosotros-container">
+    <section class="info-section">
+        <h2>¿Quiénes Somos?</h2>
+        <p>Somos un equipo comprometido con el desarrollo de soluciones tecnológicas para el sector salud. En ClinicMaster buscamos optimizar la gestión clínica y administrativa mediante tecnología moderna.</p>
+    </section>
 
-  <!-- Contenido principal -->
-  <div class="main-content" id="main-content">
-    <div class="content-container">
-      <!-- Este bloque se sobrescribe en las plantillas hijas -->
-      {% block content %}
-      {% endblock %}
-    </div>
-  </div>
+    <section class="info-section">
+        <h2>¿Quién lo desarrolla?</h2>
+        <p>Este proyecto es desarrollado por <strong>Edison Fabian Bonilla Rivera - Diego Felipe Ramirez Salvador</strong>, estudiante de Análisis y Desarrollo de Software del SENA, como parte de su etapa productiva y su proceso de formación profesional.</p>
+    </section>
+
+    <section class="info-section">
+        <h2>¿Con qué herramientas trabajamos?</h2>
+        <ul>
+            <li><strong>Django</strong> - Framework backend en Python</li>
+            <li><strong>React.js</strong> - Librería para el frontend</li>
+            <li><strong>PostgreSQL</strong> - Base de datos</li>
+            <li><strong>Git & GitHub</strong> - Control de versiones</li>
+            <li>HTML, CSS, Axios, Django REST Framework</li>
+        </ul>
+    </section>
+
+    <section class="info-section contacto-section">
+        <h2>Contacto</h2>
+        <ul>
+            <li>Email: edison.bonilla@ejemplo.com</li>
+            <li>Teléfono: +57 300 000 0000</li>
+        </ul>
+    </section>
+
+    <section class="info-section redes-section">
+        <h2>Síguenos en Redes Sociales</h2>
+        <div class="redes-links">
+            <a href="#">Facebook</a>
+            <a href="#">Instagram</a>
+            <a href="#">LinkedIn</a>
+        </div>
+    </section>
+</main>
 
     <!-- Footer -->
     <footer class="footer">
@@ -103,8 +122,6 @@
             </div>
         </div>
     </footer>
-
-  <!-- Script para el toggle de la barra lateral -->
   <script>
     function toggleSidebar() {
       var sidebar = document.getElementById('sidebar');
@@ -113,6 +130,5 @@
       content.classList.toggle('closed');
     }
   </script>
-
 </body>
 </html>

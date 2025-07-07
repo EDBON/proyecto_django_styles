@@ -20,11 +20,21 @@ from clinic_master_app import views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     # region lagin
     path("", views.login_view, name="login"),
     
+    path('restablecer/', auth_views.PasswordResetView.as_view(), name='password_reset'),
+    path('restablecer/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('restablecer/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('restablecer/complete/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+
+    #region info
+    path('sobre_nosotros/', views.sobre_nosotros, name='sobre_nosotros'),
+
     # region usuario
     # path('crear_usuario/', views.crear_usuario, name='crear_usuario'),
     path('listar_usuarios/', views.listar_usuarios, name='listar_usuarios'),

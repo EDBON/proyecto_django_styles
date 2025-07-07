@@ -82,6 +82,10 @@ def login_view(request):
 
     return render(request, "auth/login.html")
 
+#region informacion 
+def sobre_nosotros(request):
+    return render(request, 'info/sobre_nosotros.html')
+
 # region persona
 # crear persona
 def crear_persona(request, eps_id):
