@@ -11,6 +11,7 @@
   <!-- Fuentes y estilos -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'css/formulario.css' %}">
 </head>
 <body>
 
@@ -34,24 +35,26 @@
     </nav>
   </header>
 
-  <!-- Barra lateral (Sidebar) con enlaces a las vistas de Django -->
-  <div class="sidebar" id="sidebar">
-    <div class="logo">IPS Talento Humano</div>
-    <!-- Enlaces redirigidos a las vistas de Django -->
+ <!-- Barra lateral (Sidebar) con enlaces a las vistas de Django -->
+<div class="sidebar" id="sidebar">
+    <div class="logo">
+        <i class="fas fa-user-md"></i>
+        <span class="logo-text">IPS Talento Humano</span>
+    </div>
     <ul class="sidebar-menu">
-        <li><a href="{% url 'listar_personas' %}">Personas</a></li>
-        <li><a href="{% url 'listar_empleados' %}">Empleados</a></li>
-        <li><a href="{% url 'listar_usuarios' %}">Usuarios</a></li>
-        <li><a href="{% url 'listar_contratos' %}">Contratos</a></li>
-        <li><a href="{% url 'crear_usuario' %}">Crear Usuario</a></li>
-        <li><a href="{% url 'listar_movimientos' %}">Historial Movimientos</a></li>
-        <li><a href="{% url 'listar_relaciones_jerarquicas' %}">Relaciones Jerárquicas</a></li>
-        <li><a href="{% url 'listar_cargos' %}">Cargos</a></li>
+        <li><a href="{% url 'listar_personas' %}"><i class="fas fa-users"></i><span>Personas</span></a></li>
+        <li><a href="{% url 'listar_empleados' %}"><i class="fas fa-id-badge"></i><span>Empleados</span></a></li>
+        <li><a href="{% url 'listar_usuarios' %}"><i class="fas fa-user"></i><span>Usuarios</span></a></li>
+        <li><a href="{% url 'listar_contratos' %}"><i class="fas fa-file-contract"></i><span>Contratos</span></a></li>
+        <li><a href="{% url 'crear_usuario' %}"><i class="fas fa-user-plus"></i><span>Crear Usuario</span></a></li>
+        <li><a href="{% url 'listar_movimientos' %}"><i class="fas fa-history"></i><span>Historial Movimientos</span></a></li>
+        <li><a href="{% url 'listar_relaciones_jerarquicas' %}"><i class="fas fa-sitemap"></i><span>Relaciones Jerárquicas</span></a></li>
+        <li><a href="{% url 'listar_cargos' %}"><i class="fas fa-briefcase"></i><span>Cargos</span></a></li>
     </ul>
-  </div>
+</div>
 
   <!-- Botón para ocultar/mostrar barra lateral -->
-  <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+  <button class="toggle-btn" onclick="toggleSidebar()"><i class="fas fa-user-md"></i></button>
 
   <!-- Contenido principal -->
   <div class="main-content" id="main-content">

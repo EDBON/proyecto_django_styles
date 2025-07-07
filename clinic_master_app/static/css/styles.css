@@ -26,6 +26,18 @@ nav {
   color: #006699;
 }
 
+.inicio, .vacantes, .politicas, .contacto{
+  color: black;
+  transition: width 0.3s ;
+  padding: 15px;
+}
+
+.inicio:hover, .vacantes:hover, .politicas:hover, .contacto:hover{
+  background-color: #006699;
+  color: rgb(255, 255, 255);
+  border-radius: 20px ;
+}
+
 .nav-links a {
   text-decoration: none;
   color: #333;
@@ -38,65 +50,115 @@ nav {
   color: #006699;
 }
 
-/* Barra lateral */
+/* sidebar */
 .sidebar {
-  height: 100%;
-  width: 250px;
-  position: fixed;
-  top: 0;
-  left: -250px;
-  background-color: #006699;
-  padding-top: 60px;
-  transition: left 0.3s ease;
-  z-index: 1000;
-  box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-.sidebar .logo {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: #fff;
-  text-align: center;
-  padding: 20px;
-  margin-bottom: 30px;
-  visibility: hidden;
-}
-
-.sidebar a {
-  display: block;
-  color: #fff;
-  padding: 15px;
-  text-decoration: none;
-  font-size: 1.1rem;
-  transition: background-color 0.3s;
-  border-bottom: 1px solid #ccc;
-  visibility: hidden;
+    height: 100%;
+    width: 70px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #006699;
+    padding-top: 20px;
+    transition: width 0.3s ease;
+    z-index: 1000;
+    overflow: hidden;
+    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar.open {
-  left: 0;
+    width: 250px;
 }
 
-.sidebar.open .logo {
-  visibility: visible;
+.sidebar .logo {
+    color: #fff;
+    text-align: center;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.5rem;
 }
 
-.sidebar.open a {
-  visibility: visible;
+.sidebar .logo i {
+    font-size: 2rem;
+    margin-bottom: 10px;
 }
 
-.sidebar a:hover {
-  background-color: #00557f;
+.logo-text {
+    display: none;
 }
+
+.sidebar.open .logo-text {
+    display: block;
+    font-size: 1rem;
+    margin-top: 5px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu li {
+    width: 100%;
+}
+
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    padding: 15px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.sidebar-menu a i {
+    margin-right: 0;
+    width: 25px;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.sidebar.open .sidebar-menu a i {
+    margin-right: 10px;
+}
+
+.sidebar-menu a span {
+    display: none;
+}
+
+.sidebar.open .sidebar-menu a span {
+    display: inline;
+}
+
+.sidebar-menu a:hover {
+    background-color: #00557f;
+}
+
+#toggle-btn {
+    position: fixed;
+    top: 20px;
+    left: 80px;
+    background-color: #006699;
+    color: #fff;
+    border: none;
+    padding: 20px;
+    cursor: pointer;
+    z-index: 1100;
+    border-radius: 5px;
+}
+
 
 /* Botón para ocultar/mostrar barra lateral */
 .toggle-btn {
   position: absolute;
   top: 10px;
-  left: 20px;
+  left: 10px;
   background-color: #006699;
   color: white;
-  padding: 10px;
+  padding: 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;

@@ -82,7 +82,7 @@ form button:hover {
 form a {
     display: inline-block;
     font-size: 16px;
-    color: #007bff;
+    color: #006699;
     text-decoration: none;
     margin-top: 20px;
 }
@@ -107,7 +107,7 @@ form a:hover {
 
 /* Estilo de los botones del formulario */
 button[type="submit"] {
-    background-color: #007bff;
+    background-color: #006699;
     color: white;
     border: none;
     border-radius: 4px;
@@ -118,7 +118,7 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: #006699;
 }
 
 /* Responsive Design */

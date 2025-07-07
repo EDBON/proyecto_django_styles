@@ -1,133 +1,115 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Área del Paciente - Clinic Master{% endblock %}</title>
-
-    <!-- Bootstrap y Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <style>
-        .carousel-container {
-            width: 80%;
-            height: 300px;
-            margin: auto;
-            overflow: hidden;
-        }
-
-        .carousel-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .intro-section {
-            text-align: center;
-            margin: 50px auto;
-            max-width: 800px;
-        }
-
-        .intro-section h2 {
-            font-weight: bold;
-        }
-
-        .intro-section p {
-            font-size: 1.1rem;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Título de la página que puede ser sobrescrito por las plantillas hijas -->
+  <title>{% block title %}IPS Talento Humano{% endblock %}</title>
+     <link rel="shortcut icon" href="{% static 'images/logo-clinic_master.png' %}">
+  <!-- Fuentes y estilos -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'css/formulario.css' %}">
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-dark bg-primary">
-    <div class="container-fluid">
-        <button class="btn btn-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
-            ☰ Menú
-        </button>
-        <a class="navbar-brand ms-2" href="{% url 'home' %}">Clinic Master</a>
-        <div class="ms-auto">
-            <form action="{% url 'logout' %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-link text-white text-decoration-none">
-                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
-                </button>
-            </form>
-        </div>
-    </div>
-</nav>
+  <!-- Header -->
+  <header>
+    <nav>
+      <div class="logo">IPS Talento Humano</div>
+      <div class="nav-links">
+        <a class="inicio" href="#inicio">Inicio</a>
+        <a class="vacantes" href="#vacantes">Vacantes</a>
+        <a class="politicas" href="#politicas">Políticas</a>
+        <a class="contacto" href="#contacto">Contacto</a>
+      </div>
+      <!-- Botón Cerrar sesión en el Header -->
+      <div class="logout-container">
+        <form action="{% url 'logout' %}" method="post" class="logout-form">
+          {% csrf_token %}
+          <button type="submit" class="logout-btn">Cerrar sesión</button>
+        </form>
+      </div>
+    </nav>
+  </header>
 
-<!-- Menú lateral -->
-<div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="sidebarMenu">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Menú del Paciente</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+ <!-- Barra lateral (Sidebar) con enlaces a las vistas de Django -->
+<div class="sidebar" id="sidebar">
+    <div class="logo">
+        <i class="fas fa-user-md"></i>
+        <span class="logo-text">IPS Talento Humano</span>
     </div>
-    <div class="offcanvas-body">
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                
-                </a>
-                <a class="nav-link text-white" href="{% url 'listar_formacion' empleado.id %}">
-                    <i class="bi bi-calendar-check me-1"></i> Mi Formación
-                <a class="nav-link text-white" href="{% url 'listar_documentos_empleado' %}">
-                    <i class="bi bi-calendar-check me-1"></i> Mis Documentos
-                </a>
-            </li>
-        </ul>
-    </div>
+    <ul class="sidebar-menu">
+        <li><a href="{% url 'listar_formacion' empleado.id %}"><i class="fas fa-users"></i><span>Mi formacion</span></a></li>
+        <li><a href="{% url 'listar_documentos_empleado' %}"><i class="fas fa-id-badge"></i><span>Mis documentos</span></a></li>
+    </ul>
 </div>
 
-<!-- Carrusel de imágenes -->
-<div class="carousel-container mt-4">
-    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></button>
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="{% static 'images/pag_img1.jpg' %}" class="d-block w-100" alt="Imagen 1">
+  <!-- Botón para ocultar/mostrar barra lateral -->
+  <button class="toggle-btn" onclick="toggleSidebar()"><i class="fas fa-user-md"></i></button>
+
+  <!-- Contenido principal -->
+  <div class="main-content" id="main-content">
+    <div class="content-container">
+      <!-- Este bloque se sobrescribe en las plantillas hijas -->
+      {% block content %}
+      {% endblock %}
+    </div>
+  </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Logo -->
+            <div class="footer-section">
+                <img src="{% static 'images/logo-clinic_master.png' %}" alt="Clinic Master Logo" class="footer-logo">
+                <p>© 2024 Clinic Master. Todos los derechos reservados.</p>
             </div>
-            <div class="carousel-item">
-                <img src="{% static 'images/pag_web2.jpg' %}" class="d-block w-100" alt="Imagen 2">
+
+            <!-- Información de contacto -->
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <ul>
+                    <li>📍 Dirección: Calle Salud #123, Ciudad Médica</li>
+                    <li>📞 Teléfono: +34 912 345 678</li>
+                    <li>📧 Correo: contacto@clinicmaster.com</li>
+                </ul>
             </div>
-            <div class="carousel-item">
-                <img src="{% static 'images/pag_web3.jpg' %}" class="d-block w-100" alt="Imagen 3">
+
+            <!-- Enlaces útiles -->
+            <div class="footer-section">
+                <h4>Enlaces</h4>
+                <ul>
+                    <li><a href="{% url 'home' %}">Inicio</a></li>
+                    <li><a href="{% url 'sobre_nosotros' %}">Sobre nosotros</a></li>
+                    <li><a href="#">Servicios</a></li>
+                    <li><a href="#">Términos y condiciones</a></li>
+                </ul>
+            </div>
+
+            <!-- Redes sociales -->
+            <div class="footer-section">
+                <h4>Síguenos</h4>
+                <ul class="social-links">
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                </ul>
             </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </button>
-    </div>
-</div>
+    </footer>
 
-<!-- Sección de introducción -->
-<div class="intro-section">
-    <h2>Bienvenido al Portal del Paciente</h2>
-    <p>
-        Aquí podrás consultar tus citas médicas agendadas, acceder a tu historial de atenciones y solicitar nuevas citas con facilidad.  
-        Este sistema está diseñado para brindarte una experiencia cómoda, rápida y segura.
-    </p>
-    <p class="text-muted">Utiliza el menú lateral para comenzar.</p>
-</div>
-
-<!-- Contenido principal -->
-<div class="container mt-4">
-    {% block content %}{% endblock %}
-</div>
-
-<!-- Footer -->
-<footer class="text-center mt-4 p-3 bg-light">
-    <p class="mb-0">© 2024 Clinic Master. Todos los derechos reservados.</p>
-</footer>
+  <!-- Script para el toggle de la barra lateral -->
+  <script>
+    function toggleSidebar() {
+      var sidebar = document.getElementById('sidebar');
+      var content = document.getElementById('main-content');
+      sidebar.classList.toggle('open');
+      content.classList.toggle('closed');
+    }
+  </script>
 
 </body>
 </html>
